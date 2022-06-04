@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void	print_ans(int v_cnt);
-int		is_searchable(int v, int v_cnt);
+int	is_searchable(int v, int v_cnt);
 void	search(int v, int v_cnt);
 
 int	matrix[1001][1001];
