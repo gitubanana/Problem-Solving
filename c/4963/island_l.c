@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define LAND 1
+#define SEA 0
 
 int	init_2D(int ***p_arr, int w, int h);
 void	scan_map(int **map, int w, int h);
@@ -75,7 +76,7 @@ void	print_island_cnt(int **map, int w, int h)
 
 void	dfs(int **map, int w, int h, int i, int j)
 {
-	map[i][j] = 0;
+	map[i][j] = SEA;
 
 	//up
 	if (i > 0 && map[i - 1][j] == LAND)
