@@ -38,7 +38,7 @@ int	init_2D(int ***p_arr, int w, int h)
 	for (i = 0; i < h; i++)
 	{
 		(*p_arr)[i] = malloc(sizeof(int) * w);
-		if (!*p_arr[i])
+		if (!(*p_arr)[i])
 			return (0);
 	}
 	return (1);
