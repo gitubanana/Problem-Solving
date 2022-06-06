@@ -3,7 +3,7 @@
 
 int	map[50][50];
 
-void	scan_map(int w, int h)
+void	scan_map(int w, int h);
 void	dfs(int w, int h, int i, int j);
 void	print_island_cnt(int w, int h);
 
