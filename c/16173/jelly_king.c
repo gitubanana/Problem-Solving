@@ -7,7 +7,7 @@ void	scan_map(int size);
 void	print_ans(int size);
 void	move(int i, int j, int size);
 
-int	map[3][3]
+int	map[3][3];
 
 int	main(void)
 {
