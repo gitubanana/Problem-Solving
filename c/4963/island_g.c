@@ -1,5 +1,6 @@
 #include <stdio.h>
 #define LAND 1
+#define SEA 0
 
 int	map[50][50];
 
@@ -53,7 +54,7 @@ void	print_island_cnt(int w, int h)
 
 void	dfs(int	w, int h, int i, int j)
 {
-	map[i][j] = 0;
+	map[i][j] = SEA;
 
 	//up
 	if (i > 0 && map[i - 1][j] == LAND)
