@@ -31,7 +31,7 @@ void	print_ans(int size)
 {
 	char	*ans;
 
-	move(int i, int j, int size);
+	move(0, 0, size);
 	if (map[size - 1][size - 1] == REACHED)
 		ans = "HaruHaru";
 	else
