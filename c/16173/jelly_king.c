@@ -47,7 +47,7 @@ void	move(int i, int j, int size)
 		return ;
 	}
 
-	if (map[i][j] == RETURN)
+	if (map[i][j] == RETURN || map[size - 1][size - 1] == REACHED)
 		return ;
 
 	//right
