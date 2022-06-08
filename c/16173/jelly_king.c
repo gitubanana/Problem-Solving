@@ -57,4 +57,6 @@ void	move(int i, int j, int size)
 	//down
 	if (i + map[i][j] <= size - 1)
 		move(i + map[i][j], j, size);
+
+	map[i][j] = RETURN;
 }
