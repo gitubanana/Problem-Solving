@@ -8,6 +8,11 @@ typedef struct
 	int	b; //ball
 }game;
 
+int	cnt_strike(char *origin, char *num);
+int	cnt_ball(char *origin, char *num);
+int	is_ok(game *arr, int size, char *num);
+void	print_ans(game *arr, int size);
+
 int	main(void)
 {
 	int	i;
