@@ -17,7 +17,7 @@ int	main(void)
 	arr = malloc(sizeof(int) * size);
 	if (!arr)
 		return (1);
-	with_sqaure(n, arr);
+	with_square(n, arr);
 	print_ans(n, arr, size);
 	return (0);
 }
@@ -47,7 +47,7 @@ void	print_ans(int n, int *arr, int size)
 	for (cnt = 1; cnt <= 4; cnt++)
 		if (calculate(n, arr, size, cnt) == n)
 			break;
-	printf("%d", i);
+	printf("%d", cnt);
 }
 
 int	calculate(int n, int *arr, int size, int cnt)
