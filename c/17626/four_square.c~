@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int	get_size(int n);
-void	with_square(int n, int *arr);
-int	calculate(int n, int *arr, int size, int cnt);
-void	print_ans(int n, int *arr, int size);
-
 int	main(void)
 {
 	int	n;
