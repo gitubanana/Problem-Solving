@@ -5,7 +5,6 @@ typedef struct
 {
 	int	w; //weight
 	int	h; //height
-	int	r; //rank
 }body;
 
 void	scan_arr(body *arr, int size);
@@ -38,15 +37,6 @@ void	scan_arr(body *arr, int size)
 void	print_ans(body *arr, int size)
 {
 	int	i;
-
-	make_rank(arr, size);
-	for (i = 0; i < size; i++)
-		printf("%d ", arr[i].r);
-}
-
-void	make_rank(body *arr, int size)
-{
-	int	i;
 	int	j;
 	int	rank;
 
@@ -56,6 +46,6 @@ void	make_rank(body *arr, int size)
 		for (j = 0; j < size; j++)
 			if (arr[i].w < arr[j].w && arr[i].h < arr[j].h)
 				rank++;
-		arr[i].r = rank;
+		printf("%d ", rank);
 	}
 }
