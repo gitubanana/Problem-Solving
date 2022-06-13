@@ -32,7 +32,7 @@ int	count(int num, int aim)
 	{
 		if (num % 10 == aim)
 			cnt++;
-		num /= 10;
+		n /= 10;
 	}
 	return (cnt);
 }
