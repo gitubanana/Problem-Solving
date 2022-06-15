@@ -9,7 +9,7 @@ int	main(void)
 	int	n;
 	char	str[1001];
 
-	scanf("%d", &n);
+	scanf("%d\n", &n);
 	while (n--)
 	{
 		gets(str);
