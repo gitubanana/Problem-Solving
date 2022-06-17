@@ -17,7 +17,7 @@ int	main(void)
 	{
 		scanf("%d", &tmp);
 		if (tmp == 0 && top > -1)
-			stack[top--] = 0;
+			top--;
 		else
 			stack[++top] = tmp;
 	}
