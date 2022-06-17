@@ -11,6 +11,8 @@ int	main(void)
 
 	scanf("%d", &n);
 	stack = calloc(n, sizeof(int));
+	if (!stack)
+		exit(-1);
 	while (n--)
 	{
 		scanf("%d", &tmp);
@@ -20,6 +22,8 @@ int	main(void)
 			stack[++top] = tmp;
 	}
 	printf("%d", get_sum(stack, top + 1));
+	free(stack);
+	exit(0);
 }
 
 int	get_sum(int *arr, int size)
