@@ -62,7 +62,7 @@ int	get_len(char *str)
 	int	len;
 
 	len = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '<')
+	while (str[len] && str[len] != ' ' && str[len] != '<')
 		len++;
 	return (len);
 }
