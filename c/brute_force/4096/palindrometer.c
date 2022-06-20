@@ -27,7 +27,7 @@ void	print_ans(char *str)
 
 	i = 0;
 	num = atoi(str);
-	len = strlen(len);
+	len = strlen(str);
 	while (1)
 	{
 		if (is_palindrome(num + i, len))
