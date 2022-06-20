@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int	mod(int n, int cnt);
 int	is_palindrome(int num, int len);
@@ -26,10 +27,10 @@ void	print_ans(char *str)
 
 	i = 0;
 	num = atoi(str);
-	len = get_len(len);
+	len = strlen(len);
 	while (1)
 	{
-		if (is_palindrome(n + i, len))
+		if (is_palindrome(num + i, len))
 			break;
 		i++;
 	}
