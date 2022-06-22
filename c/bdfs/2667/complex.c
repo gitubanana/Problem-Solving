@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define HOME 49
 
 void	scan_map(int size);
 int	cmp(const void *a, const void *b);
