@@ -36,6 +36,11 @@ int	main(void)
 	return (0);
 }
 
+int	cmp(const void *a, const void *b)
+{
+	return *(int *)a - *(int *)b;
+}
+
 void	scan_map(int size)
 {
 	int	i;
@@ -65,9 +70,4 @@ void	dfs(int i, int j, int size, int *cnt)
 	//right
 	if (j + 1 <= size - 1 && map[i][j + 1] == HOME)
 		dfs(i, j + 1, size, cnt);
-}
-
-int	cmp(const void *a, const void *b)
-{
-	return *(int *)a - *(int *)b;
 }
