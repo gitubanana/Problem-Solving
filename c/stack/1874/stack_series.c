@@ -22,7 +22,7 @@ int	main(void)
 	else
 	{
 		top = -1;
-		print_or_ans(n, 0);
+		print_or_bool(n, 0);
 	}
 	return (0);
 }
