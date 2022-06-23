@@ -5,7 +5,7 @@ int	pop(int flag);
 void	push(int data, int flag);
 int	print_or_bool(int size, int flag);
 
-int	stack[10001];
+int	stack[100001];
 int	arr[100001];
 int	top = -1;
 
