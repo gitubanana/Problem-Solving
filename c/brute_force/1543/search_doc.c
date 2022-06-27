@@ -7,6 +7,7 @@ int	main(void)
 	char	*tmp;
 	char	aim[51], doc[2501];
 
+	cnt = 0;
 	scanf("%[^\n] %[^\n]", doc, aim);
 	tmp = doc;
 	len = strlen(aim);
