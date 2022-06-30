@@ -9,7 +9,7 @@ typedef struct
 }name;
 
 int	cmp_str(const void *a, const void *b);
-void	bin_search(char *tmp, int left, int right);
+int	bin_search(char *tmp, int left, int right);
 
 char	tmp[21];
 char	src[100000][21];
@@ -32,7 +32,7 @@ int	main(void)
 	for (i = 0; i < quiz; i++)
 	{
 		scanf("%s", tmp);
-		if (tmp[0] >= '0' && tmp <= '9')
+		if (tmp[0] >= '0' && tmp[0] <= '9')
 			printf("%s\n", src[atoi(tmp) - 1]);
 		else
 			printf("%d\n", bin_search(tmp, 0, n - 1));
@@ -45,7 +45,7 @@ int	cmp_str(const void *a, const void *b)
 	return strcmp(((name *)a)->str, ((name *)b)->str);
 }
 
-void	bin_search(char *tmp, int left, int right)
+int	bin_search(char *aim, int left, int right)
 {
 	int	mid, result;
 
