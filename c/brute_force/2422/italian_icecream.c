@@ -2,6 +2,8 @@
 
 void	print_ans(int n);
 
+int	arr[201][201];
+
 int	main(void)
 {
 	int	i;
@@ -10,7 +12,7 @@ int	main(void)
 	scanf("%d %d", &n, &m);
 	for (i = 0; i < n; i++)
 	{
-		scanf("%d %d" &a, &b);
+		scanf("%d %d", &a, &b);
 		if (a > b)
 			arr[b][a] = 1;
 		else
