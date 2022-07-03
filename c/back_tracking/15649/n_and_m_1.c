@@ -2,6 +2,9 @@
 
 void	back_tracking(int n, int depth, int m);
 
+int	arr[8];
+int	visited[9];
+
 int	main(void)
 {
 	int	n, m;
