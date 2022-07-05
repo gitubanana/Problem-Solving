@@ -33,7 +33,7 @@ void	back_tracking(int v, int n, int depth, int m)
 		{
 			arr[depth] = i;
 			visited[i] = 1;
-			back_tracking(i, n, depth, m);
+			back_tracking(i, n, depth + 1, m);
 			visited[i] = 0;
 		}
 	}
