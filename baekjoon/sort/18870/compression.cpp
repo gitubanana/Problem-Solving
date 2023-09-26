@@ -4,17 +4,6 @@
 #include <map>
 #include <set>
 
-struct t_coord
-{
-    int x;
-    int idx;
-
-    inline bool operator<(const struct t_coord &other) const
-    {
-        return (this->x < other.x);
-    }
-};
-
 int main(void)
 {
     std::ios::sync_with_stdio(0), std::cin.tie(0);
