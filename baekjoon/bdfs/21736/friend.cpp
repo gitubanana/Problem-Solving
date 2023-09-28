@@ -2,7 +2,6 @@
 
 enum e_space
 {
-    VISITED = '-',
     EMPTY = 'O',
     WALL = 'X',
     ME = 'I',
@@ -22,15 +21,14 @@ void    dfs(int y, int x)
     if (map[y][x] == PERSON)
         ++max;
 
-    map[y][x] = VISITED;
+    map[y][x] = WALL;
     for (int i = 0; i < dir_size; ++i)
     {
         int next_y = y + dy[i];
         int next_x = x + dx[i];
         if (!(0 <= next_y && next_y < y_size)
             || !(0 <= next_x && next_x < x_size)
-            || map[next_y][next_x] == WALL
-            || map[next_y][next_x] == VISITED)
+            || map[next_y][next_x] == WALL)
             continue ;
         dfs(next_y, next_x);
     }
@@ -38,7 +36,7 @@ void    dfs(int y, int x)
 
 int main(void)
 {
-    std::ios::sync_with_stdio(0), std::cin.tie(0);
+    std::cin.tie(0)->sync_with_stdio(0);
 
     int y, x;
     int start_y = 0, start_x = 0;
