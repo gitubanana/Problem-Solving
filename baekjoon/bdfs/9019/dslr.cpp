@@ -8,40 +8,19 @@ bool visited[MAX];
 
 struct t_register
 {
-    int   _num;
+    int   num;
     std::string methods;
 
-    t_register(int num) : _num(num)
-    {
+    t_register(int n) : num(n) { }
+
+    inline bool operator==(const t_register &other) const {
+        return (num == other.num);
     }
 
-    inline bool operator==(const t_register &other) const
-    {
-        return (_num == other._num);
-    }
-
-    void    D(void)
-    {
-        _num = (_num * 2) % 10000;
-    }
-
-    void    S(void)
-    {
-        if (_num == 0)
-            _num = 9999;
-        else
-            --_num;
-    }
-
-    void    L(void)
-    {
-        _num = (_num % 1000 * 10) + (_num / 1000);
-    }
-
-    void    R(void)
-    {
-        _num = (_num % 10 * 1000) + (_num / 10);
-    }
+    void    D(void) { num = (num * 2) % 10000; }
+    void    S(void) { (num == 0) ? num = 9999 : --num; }
+    void    L(void) { num = (num % 1000 * 10) + (num / 1000); }
+    void    R(void) { num = (num % 10 * 1000) + (num / 10); }
 };
 
 void    bfs(t_register start, t_register end)
@@ -57,7 +36,7 @@ void    bfs(t_register start, t_register end)
         &t_register::R
     };
 
-    visited[start._num] = true;
+    visited[start.num] = true;
     q.push(start);
     while (!q.empty())
     {
@@ -68,15 +47,16 @@ void    bfs(t_register start, t_register end)
             t_register  next(cur);
 
             (next.*func)();
-            next.methods.push_back(method_name[i]);
-            if (visited[next._num] == true)
+            if (visited[next.num] == true)
                 continue ;
+
+            next.methods.push_back(method_name[i]);
             if (next == end)
             {
                 std::cout << next.methods << '\n';
                 return ;
             }
-            visited[next._num] = true;
+            visited[next.num] = true;
             q.push(next);
         }
         q.pop();
