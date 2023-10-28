@@ -1,4 +1,5 @@
 #include <iostream>
+#define PRINT_LINE(parent, child) std::cout << (parent) << ' ' << (child) << '\n'
 
 // 1이 루트
 // leaf_cnt만큼 1의 자식으로 만듦
@@ -16,13 +17,13 @@ int main(void)
     std::cout << "0 1\n1 2" << '\n';
     for (int v = 3; v <= leaf_cnt; ++v)
     {
-        std::cout << root << ' ' << v << '\n';
+        PRINT_LINE(root, v);
     }
 
     int parent = leaf_cnt;
     for (int v = leaf_cnt + 1; v < v_cnt; ++v)
     {
-        std::cout << parent << ' ' << v << '\n';
+        PRINT_LINE(parent, v);
         parent = v;
     }
 
