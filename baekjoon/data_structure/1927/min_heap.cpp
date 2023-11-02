@@ -10,6 +10,7 @@ template <typename T, typename Container = std::vector<T>,
 class priority_queue
 {
     private:
+        Compare   comp;
         Container container;
 
     public:
@@ -21,11 +22,13 @@ class priority_queue
             while (child_idx > 0)
             {
                 size_t  parent_idx = (child_idx - 1) / 2;
+                T       &child = container[child_idx];
+                T       &parent = container[parent_idx];
 
-                if (Compare()(container[child_idx], container[parent_idx]))
+                if (comp(child, parent))
                     break ;
 
-                std::swap(container[child_idx], container[parent_idx]);
+                std::swap(child, parent);
                 child_idx = parent_idx;
             }
         }
@@ -48,15 +51,21 @@ class priority_queue
 
             size_t  parent_idx = 0;
             size_t  child_idx = 1;
-            while (child_idx < container.size())
+            size_t  container_size = container.size();
+            while (child_idx < container_size)
             {
-                if (Compare()(container[child_idx], container[child_idx + 1]))
-                    ++child_idx;
+                size_t  sibling_idx = child_idx + 1;
+                if (sibling_idx < container_size
+                    && comp(container[child_idx], container[sibling_idx]))
+                    child_idx = sibling_idx;
 
-                if (Compare()(container[child_idx], container[parent_idx]))
+                T   &parent = container[parent_idx];
+                T   &child = container[child_idx];
+
+                if (comp(child, parent))
                     break ;
 
-                std::swap(container[child_idx], container[parent_idx]);
+                std::swap(child, parent);
                 parent_idx = child_idx;
                 child_idx = child_idx * 2 + 1;
             }

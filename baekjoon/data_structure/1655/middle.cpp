@@ -33,12 +33,9 @@ class priority_queue
             }
         }
 
-        void    print_top(void)
+        const   T&top(void)
         {
-            if (container.empty())
-                std::cout << "-1\n";
-            else
-                std::cout << container[0] << '\n';
+            return (container[0]);
         }
 
         void    pop(void)
@@ -72,25 +69,55 @@ class priority_queue
         }
 };
 
+//    중간값을 기준으로
+//    /         |
+// max_heap   max_heap
+
+priority_queue<int> left;
+priority_queue<int, std::vector<int>, std::greater<int>> right;
+
+void    print_middle(int size, int to_push)
+{
+    if (size == 1)
+    {
+        left.push(to_push);
+        right.push(to_push);
+    }
+    else
+    {
+        const int   left_top = left.top();
+
+        if (to_push > left_top)
+        {
+            if (size & 1)
+                right.pop(), left.push(to_push);
+            right.push(to_push);
+            if (left.top() != right.top())
+                left.pop(), left.push(right.top());
+        }
+        else
+        {
+            if (!(size & 1))
+                left.pop(), right.push(to_push);
+            left.push(to_push);
+            if (left.top() != right.top())
+                right.pop(), right.push(left.top());
+        }
+    }
+    std::cout << left.top() << '\n';
+}
+
 int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
-    priority_queue<int> pq;
-    int                 n, gift_cnt, gift;
+    int size, num;
 
-    std::cin >> n;
-    while (n--)
+    std::cin >> size;
+    for (int cnt = 1; cnt <= size; ++cnt)
     {
-        std::cin >> gift_cnt;
-        if (gift_cnt == 0)
-            pq.print_top(), pq.pop();
-        else
-        {
-            while (gift_cnt--)
-                std::cin >> gift, pq.push(gift);
-        }
+        std::cin >> num;
+        print_middle(cnt, num);
     }
-
     return (0);
 }
