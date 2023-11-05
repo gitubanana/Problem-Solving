@@ -8,14 +8,13 @@ enum e_space
 };
 
 const int   MAX = 1000;
-const int   VISITED_WALL = (1 << 0);
-const int   VISITED_EMPTY = (1 << 1);
 
-int     visited[MAX][MAX];
+char    visited[MAX][MAX];
 char    map[MAX][MAX + 1];
 int     y_size, x_size;
 int     dy[] = {1, -1, 0, 0};
 int     dx[] = {0, 0, -1, 1};
+int     bits[] = {1 << 0, 1 << 1};
 
 struct t_pos
 {
@@ -39,7 +38,7 @@ int bfs(t_pos start, t_pos end)
 
     std::queue<t_pos>   q;
 
-    visited[start.y][start.x] |= VISITED_EMPTY;
+    visited[start.y][start.x] |= bits[start.has_broken_wall];
     q.push(start);
     while (!q.empty())
     {
@@ -56,30 +55,23 @@ int bfs(t_pos start, t_pos end)
                 || !(0 <= next.x && next.x < x_size))
                 continue ;
 
-            int &next_visited = visited[next.y][next.x];
-            if (cur.has_broken_wall == true)
-            {
-                if (next_visited & VISITED_WALL)
-                    continue ;
-                next_visited |= VISITED_WALL;
-            }
-            else
-            {
-                if (next_visited & VISITED_EMPTY)
-                    continue ;
-                next_visited |= VISITED_EMPTY;
-            }
+            char &next_visited = visited[next.y][next.x];
+            char &next_space = map[next.y][next.x];
 
-            if (map[next.y][next.x] == WALL)
+            if (next_space == WALL)
             {
                 if (cur.has_broken_wall == true)
                     continue ;
                 next.has_broken_wall = true;
             }
 
+            if (next_visited & bits[next.has_broken_wall])
+                continue ;
+
             ++next.cnt;
             if (next == end)
                 return (next.cnt);
+            next_visited |= bits[next.has_broken_wall];
             q.push(next);
         }
         q.pop();
