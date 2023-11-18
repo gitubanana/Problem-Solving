@@ -33,7 +33,7 @@ void    topological_sort(void)
     }
 
     for (int i = ans.size() - 1; i >= 0; --i)
-        std::cout << ans.at(i) << ' ';
+        std::cout << ans[i] << ' ';
     std::cout << '\n';
 }
 
