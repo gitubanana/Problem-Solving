@@ -13,6 +13,7 @@ int64_t FIRST_4_0 = 68719476720;
 //     int64_t pos = 0;
 
 //     for (int i = 0; i < 9; ++i) {
+//         std::cout << ((num >> pos) & FIRST_4_1) << ' ';
 //         pos += 4;
 //         if ((i + 1) % 3 == 0)
 //             std::cout << '\n';
