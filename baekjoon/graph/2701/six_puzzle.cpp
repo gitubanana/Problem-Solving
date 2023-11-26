@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <map>
+#include <unordered_map>
 
 int ALL_1 = 0b1111111111111111111111;
 int DATA_BIT = 3;
@@ -50,6 +51,10 @@ struct t_puzzle
         // print_bits(map);
     }
 
+    inline bool operator==(const t_puzzle &other) const {
+        return (map == other.map);
+    }
+
     int getEmptyPos(int idx) {
         static int nextEmptyPos[][3] = {
             {3, 15, -1},
@@ -81,9 +86,21 @@ struct t_puzzle
     }
 };
 
+namespace std {
+    template <>
+    struct hash<t_puzzle> {
+        size_t operator()(const t_puzzle& puzzle) const {
+            hash<int> hash_func;
+
+            return hash_func(puzzle.map);
+        }
+    };
+}
+
 void bfs(t_puzzle &start, t_puzzle &end)
 {
-    typedef std::map<int, int> t_map;
+    typedef std::unordered_map<int, int> t_cnt;
+    typedef std::unordered_map<int, std::string> t_str;
 
     if (start.map == end.map)
     {
@@ -92,11 +109,11 @@ void bfs(t_puzzle &start, t_puzzle &end)
     }
 
     std::queue<t_puzzle> q;
-    t_map                cnt;
-    std::map<int, std::string> _str;
+    t_cnt                cnt;
+    t_str                str;
 
     q.push(start), cnt[start.map] = 0;
-    _str[start.map] = "";
+    str[start.map] = "";
     while (!q.empty())
     {
         t_puzzle &cur = q.front();
@@ -114,15 +131,15 @@ void bfs(t_puzzle &start, t_puzzle &end)
 
             if (next.map == end.map)
             {
-                std::cout << cur_cnt + 1 << ' ' << _str[cur.map] << swapped_ch;
+                std::cout << cur_cnt + 1 << ' ' << str[cur.map] << swapped_ch;
                 return ;
             }
 
-            t_map::iterator it = cnt.find(next.map);
+            t_cnt::iterator it = cnt.find(next.map);
             if (it == cnt.end())
             {
                 cnt[next.map] = cur_cnt + 1;
-                _str[next.map] = _str[cur.map] + swapped_ch;
+                str[next.map] = str[cur.map] + swapped_ch;
                 q.push(next);
             }
         }
