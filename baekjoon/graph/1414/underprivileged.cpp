@@ -56,17 +56,19 @@ inline int getWeight(int ch)
 int minWeight(void)
 {
     int ret = 0;
+    int restCnt = vCnt;
 
     for (int v = 0; v < vCnt; ++v)
         parents[v] = v;
 
-    while (!pq.empty())
+    while (!pq.empty() && restCnt)
     {
         const t_edge &cur = pq.top();
         if (getParent(cur.from) != getParent(cur.to))
         {
             ret += cur.weight;
             union_(cur.from, cur.to);
+            --restCnt;
         }
         pq.pop();
     }
