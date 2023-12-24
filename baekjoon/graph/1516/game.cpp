@@ -4,7 +4,7 @@
 
 typedef std::vector<int> t_vec;
 
-const int   MAX = 100001;
+const int   MAX = 501;
 
 int vCnt;
 int time_[MAX];
