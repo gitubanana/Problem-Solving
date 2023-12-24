@@ -18,19 +18,6 @@ def topological_sort():
             dfs(v)
 
 
-def get_times(cur):
-    global visited, time
-
-    if visited[cur]:
-        return time[cur]
-
-    ret = 0
-    visited[cur] = True
-    for next in links[cur]:
-        ret = max(ret, get_times(next))
-    return ret
-
-
 if __name__ == '__main__':
     def readline(): return sys.stdin.readline()
     def splitIntoInt(): return map(int, readline().split())
@@ -51,9 +38,11 @@ if __name__ == '__main__':
     visited = [False for _ in range(v_cnt)]
     topological_sort()
 
-    visited = [False for _ in range(v_cnt)]
-    for v in orders:
-        time[v] += get_times(v)
+    for cur in orders:
+        to_plus = 0
+        for prev in links[cur]:
+            to_plus = max(to_plus, time[prev])
+        time[cur] += to_plus
 
     for v in range(1, v_cnt):
         print(time[v])
