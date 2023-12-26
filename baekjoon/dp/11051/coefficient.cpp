@@ -12,7 +12,7 @@ int main(void)
     int N, R;
 
     std::cin >> N >> R;
-    for (int n = 0; n <= N; ++n)
+    for (int n = 1; n <= N; ++n)
     {
         dp[n][0] = 1;
         for (int r = 1; r <= R; ++r)
