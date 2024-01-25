@@ -35,7 +35,7 @@ void    setFlower(int y, int x, bool isFlowerValue)
         isFlower[y + dy[i]][x + dx[i]] = isFlowerValue;
 }
 
-void    back_tracking(int curY, int curX, int totalPrice, int depth)
+void    back_tracking(int totalPrice, int depth)
 {
     if (depth == LIMIT)
     {
@@ -48,11 +48,14 @@ void    back_tracking(int curY, int curX, int totalPrice, int depth)
     {
         for (int x = 1; x < seedSize; ++x)
         {
+            if (isFlower[y][x])
+                continue ;
+
             int landPrice = getLandPrice(y, x);
             if (landPrice != NOT_AVAILABLE)
             {
                 setFlower(y, x, true);
-                back_tracking(y, x, totalPrice + landPrice, depth + 1);
+                back_tracking(totalPrice + landPrice, depth + 1);
                 setFlower(y, x, false);
             }
         }
@@ -72,7 +75,7 @@ int main(void)
     }
 
     seedSize = size - 1;
-    back_tracking(1, 1, 0, 0);
+    back_tracking(0, 0);
 
     std::cout << min << '\n';
     return (0);
