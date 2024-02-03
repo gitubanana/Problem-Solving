@@ -1,17 +1,48 @@
-#include <cstdio>
-#include <string.h>
-int main() {
-    int n1, n2, idx=0, p=0, s1, s2, ans[10001];
-    char c1[10001], c2[10001];
-	scanf("%s%s", c1, c2);
-	s1 = strlen(c1); s2 = strlen(c2);
-	while (s1||s2||p) {
-		if (s1)	n1 = c1[(s1--) - 1]-'0';
-		if (s2)	n2 = c2[(s2--) - 1]-'0'; 
-		ans[idx++] = (n1 + n2 + p) % 10;
-		p = n1 + n2 + p > 9 ? 1 : 0;
-		n1 = n2 = 0;
+#include <iostream>
+
+const int MAX = 10000;
+const int NUM_CNT = 2;
+
+char ans[MAX + 2];
+int ansIdx = MAX;
+int inputIdx[NUM_CNT];
+std::string input[NUM_CNT];
+
+int main()
+{
+    std::cin.tie(0)->sync_with_stdio(0);
+
+    for (int i = 0; i < NUM_CNT; ++i)
+        std::cin >> input[i];
+
+    int carry = 0;
+
+    for (int i = 0; i < NUM_CNT; ++i)
+        inputIdx[i] = input[i].size() - 1;
+    while (true)
+    {
+        int curNum = 0;
+        bool isBreak = true;
+
+        for (int i = 0; i < NUM_CNT; ++i)
+        {
+            if (inputIdx[i] >= 0)
+            {
+                curNum += input[i][inputIdx[i]--] - '0';
+                isBreak &= inputIdx[i] < 0;
+            }
+        }
+
+        int toAdd = carry + curNum;
+        ans[ansIdx--] = toAdd % 10 + '0';
+        carry = (toAdd >= 10);
+
+        if (isBreak)
+            break ;
 	}
-	for (int i = idx-1; i >= 0; i--)printf("%d", ans[i]);
+    if (carry)
+        ans[ansIdx--] = carry + '0';
+
+    std::cout << &ans[ansIdx + 1] << '\n';
 	return 0;
 }
