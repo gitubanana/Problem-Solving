@@ -84,18 +84,15 @@ bool isValidMap(void)
 
     if (!oWon && xWon)
     {
-        if (oCnt + 1 == xCnt)
-            return (true);
+        return (oCnt + 1 == xCnt);
     }
     else if (oWon && !xWon)
     {
-        if (oCnt == xCnt)
-            return (true);
+        return (oCnt == xCnt);
     }
     else if (!oWon && !xWon)
     {
-        if (oCnt == 4 && xCnt == 5)
-            return (true);
+        return (oCnt == 4 && xCnt == 5);
     }
 
     return (false);
