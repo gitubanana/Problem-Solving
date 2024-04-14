@@ -1,9 +1,12 @@
 #include <iostream>
+#include <climits>
+#define GET_MAX(a, b) (a) < (b) ? (b) : (a)
+#define GET_MIN(a, b) (a) > (b) ? (b) : (a)
 
 const int MAX = 500;
 const int LIMIT = 4;
-const int dy[] = {0, -1, 0, 1};
-const int dx[] = {-1, 0, 1, 0};
+const int dy[] = {1, 0, -1, 0};
+const int dx[] = {0, 1, 0, -1};
 const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int maxSum;
@@ -11,11 +14,11 @@ int ySize, xSize;
 int map[MAX][MAX];
 bool visited[MAX][MAX];
 
-void    dfs(int y, int x, int curSum=0, int depth=0)
+void    dfs(int y, int x, int curSum, int depth=1)
 {
     if (depth == LIMIT)
     {
-        maxSum = std::max(maxSum, curSum);
+        maxSum = GET_MAX(maxSum, curSum);
         return ;
     }
 
@@ -37,33 +40,39 @@ void    dfs(int y, int x, int curSum=0, int depth=0)
 
 void    checkOh(int y, int x)
 {
-    for (int startDir = 0; startDir < dirSize; ++startDir)
+    int addibleCnt = 4;
+    int cmp = map[y][x];
+    int minNum = INT_MAX;
+
+    for (int dir = 0; dir < dirSize; ++dir)
     {
-        int cmp = map[y][x];
-        int dirCnt = 3;
-        int dir = startDir;
+        int nextY = y + dy[dir];
+        int nextX = x + dx[dir];
 
-        while (dirCnt--)
+        if (!(0 <= nextY && nextY < ySize)
+            || !(0 <= nextX && nextX < xSize))
         {
-            int nextY = y + dy[dir];
-            int nextX = x + dx[dir];
-
-            if (!(0 <= nextY && nextY < ySize)
-                || !(0 <= nextX && nextX < xSize))
+            --addibleCnt;
+            minNum = 0;
+            if (addibleCnt < 3)
                 break ;
-
-            cmp += map[nextY][nextX];
-            dir = (dir + 1) % dirSize;
+            continue ;
         }
 
-        if (dirCnt == -1)
-            maxSum = std::max(maxSum, cmp);
+        const int &toAdd = map[nextY][nextX];
+
+        minNum = GET_MIN(minNum, toAdd);
+        cmp += toAdd;
     }
+    if (addibleCnt >= 3)
+        maxSum = GET_MAX(maxSum, cmp - minNum);
 }
 
 int main(void)
 {
-    std::cin.tie(0)->sync_with_stdio(0);
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
 
     std::cin >> ySize >> xSize;
     for (int y = 0; y < ySize; ++y)
@@ -78,7 +87,7 @@ int main(void)
     {
         for (int x = 0; x < xSize; ++x)
         {
-            dfs(y, x);
+            dfs(y, x, map[y][x]);
             checkOh(y, x);
         }
     }
