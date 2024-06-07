@@ -137,7 +137,7 @@ int main(void)
             int &d1 = dist[0];
             int &d2 = dist[1];
 
-            d1 = y + (y == 0);
+            d1 = size - y - 1;
             while (d1 > 0)
             {
                 d2 = 1;
@@ -151,22 +151,6 @@ int main(void)
                     ++d2;
                 }
                 --d1;
-            }
-
-            d2 = size - x - 1;
-            while (d2 > 0)
-            {
-                d1 = 1;
-                while (y + d1 + d2 < size
-                        && x + d2 - d1 - d2 >= 0)
-                {
-                    ans = std::min(
-                        ans,
-                        getSmallDiff()
-                    );
-                    ++d1;
-                }
-                --d2;
             }
         }
     }
