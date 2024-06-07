@@ -78,7 +78,10 @@ inline int getDistrictNum(int y, int x)
     int &d2 = dist[1];
 
     if (isFour[y][x])
+    {
+        isFour[y][x] = false;
         return (4);
+    }
 
     if (y < vY + d1 && x <= vX)
         return (0);
@@ -94,7 +97,6 @@ inline int getDistrictNum(int y, int x)
 
 int getSmallDiff()
 {
-    memset(isFour, false, sizeof(isFour));
     setIsFour();
     for (int i = 0; i < DISTRICT_CNT; ++i)
     {
