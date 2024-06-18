@@ -1,8 +1,11 @@
 #include <iostream>
 
-inline int getDiff(int small, int big)
+inline int64_t getDiff(int64_t small, int64_t big)
 {
-    int diff = big - small - 1;
+    if (small == big)
+        return (0);
+
+    int64_t diff = big - small - 1;
     return diff * (diff > 0);
 }
 
@@ -12,7 +15,11 @@ int main(void)
 
     std::cin >> small >> big;
     if (small > big)
-        std::swap(small, big);
+    {
+        small ^= big;
+        big ^= small;
+        small ^= big;
+    }
 
     std::cout << getDiff(small, big) << '\n';
     ++small, --big;
