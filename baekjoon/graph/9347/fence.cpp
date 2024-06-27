@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring>
 #include <vector>
 #include <queue>
 
@@ -15,6 +14,7 @@ struct t_pos
 };
 
 const int MAX_SIZE = 1000;
+const int VISITED = (1 << 6);
 const int dy[] = {-1, 1, 0, 0};
 const int dx[] = {0, 0, -1, 1};
 const int dirSize = sizeof(dy) / sizeof(dy[0]);
@@ -22,7 +22,6 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 int checked;
 int ySize, xSize;
 char map[MAX_SIZE][MAX_SIZE];
-bool visited[MAX_SIZE][MAX_SIZE];
 
 int    bfs(std::queue<t_pos> &q, std::vector<t_pos> &wall)
 {
@@ -33,7 +32,7 @@ int    bfs(std::queue<t_pos> &q, std::vector<t_pos> &wall)
         const t_pos cur = q.front();
         q.pop();
 
-        if (map[cur.y][cur.x] == EMPTY)
+        if ((map[cur.y][cur.x] ^ VISITED) == EMPTY)
         {
             ++cnt;
             ++checked;
@@ -48,10 +47,8 @@ int    bfs(std::queue<t_pos> &q, std::vector<t_pos> &wall)
 
             if (!(0 <= next.y && next.y < ySize)
                 || !(0 <= next.x && next.x < xSize)
-                || visited[next.y][next.x])
+                || map[next.y][next.x] & VISITED)
                 continue ;
-
-            visited[next.y][next.x] = true;
 
             char &nextSpace = map[next.y][next.x];
             if (nextSpace == WALL)
@@ -62,6 +59,8 @@ int    bfs(std::queue<t_pos> &q, std::vector<t_pos> &wall)
             {
                 q.push(next);
             }
+
+            nextSpace |= VISITED;
         }
     }
     return (cnt);
@@ -73,15 +72,12 @@ void    findSecurityLevel(int emptyCnt)
     std::vector<t_pos> wall;
 
     checked = 0;
-    memset(visited, false, sizeof(visited));
     for (int y = 0; y < ySize; ++y)
     {
         int step = (y == 0 || y == ySize - 1 ? 1 : xSize - 1);
 
         for (int x = 0; x < xSize; x += step)
         {
-            visited[y][x] = true;
-
             if (map[y][x] == WALL)
             {
                 wall.push_back({y, x});
@@ -90,6 +86,8 @@ void    findSecurityLevel(int emptyCnt)
             {
                 q.push({y, x});
             }
+
+            map[y][x] |= VISITED;
         }
     }
 
