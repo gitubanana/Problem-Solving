@@ -43,32 +43,33 @@ inline bool isOk(bool map[MAX_Y_SIZE][MAX_X_SIZE])
     return (true);
 }
 
-void    backTracking(bool cur[MAX_Y_SIZE][MAX_X_SIZE], int start=0, int depth=0)
+void    backTracking(bool cur[MAX_Y_SIZE][MAX_X_SIZE], int changeY=0, int changeCnt=0)
 {
-    if (isOk(cur))
+    if (changeY == ySize)
     {
-        minCnt = std::min(minCnt, depth);
-    }
+        if (isOk(cur))
+            minCnt = std::min(minCnt, changeCnt);
 
-    if (minCnt <= depth + 1)
+        return ;
+    }
+ 
+    backTracking(cur, changeY + 1, changeCnt);
+    if (minCnt <= changeCnt + 1)
     {
         return ;
     }
 
-    for (int y = start; y < ySize; ++y)
+    bool next[MAX_Y_SIZE][MAX_X_SIZE];
+
+    memcpy(next, cur, sizeof(startMap));
+    for (int change = false; change <= true; ++change)
     {
-        bool next[MAX_Y_SIZE][MAX_X_SIZE];
-
-        memcpy(next, cur, sizeof(startMap));
-        for (int change = false; change <= true; ++change)
+        for (int x = 0; x < xSize; ++x)
         {
-            for (int x = 0; x < xSize; ++x)
-            {
-                next[y][x] = change;
-            }
-
-            backTracking(next, y + 1, depth + 1);
+            next[changeY][x] = change;
         }
+
+        backTracking(next, changeY + 1, changeCnt + 1);
     }
 }
 
@@ -90,7 +91,7 @@ int main(void)
             }
         }
 
-        minCnt = INT_MAX;
+        minCnt = ySize;
         backTracking(startMap);
         std::cout << '#' << t << ' ' << minCnt << '\n';
     }
