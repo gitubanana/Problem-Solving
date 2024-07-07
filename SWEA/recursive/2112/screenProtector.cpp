@@ -48,6 +48,10 @@ void    backTracking(bool cur[MAX_Y_SIZE][MAX_X_SIZE], int start=0, int depth=0)
     if (isOk(cur))
     {
         minCnt = std::min(minCnt, depth);
+    }
+
+    if (minCnt <= depth + 1)
+    {
         return ;
     }
 
@@ -64,8 +68,6 @@ void    backTracking(bool cur[MAX_Y_SIZE][MAX_X_SIZE], int start=0, int depth=0)
             }
 
             backTracking(next, y + 1, depth + 1);
-            if (minCnt <= depth + 1)
-                return ;
         }
     }
 }
