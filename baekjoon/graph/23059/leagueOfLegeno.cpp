@@ -65,7 +65,7 @@ int main(void)
 
         std::cin >> from >> to;
         ++indegree[to];
-        int &fromIn = indegree[from];
+        indegree[from];
         edges[from].push_back(to);
     }
 
