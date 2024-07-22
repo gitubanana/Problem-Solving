@@ -4,66 +4,67 @@
 
 struct t_edge
 {
-    int to;
+    int v;
     int weight;
 };
 
-typedef std::vector<t_edge> t_vec;
-
 const int   MAX = 100001;
 
-t_vec linked[MAX];
+int vCnt, farthestNode, maxDist;
 bool  visited[MAX];
-int   v_cnt, ans;
+std::vector<t_edge> edges[MAX];
 
-int dfs(int cur, int cur_weight)
+void    findFarthestNode(int cur=1, int curDist=0)
 {
-    t_vec   &linked_nodes = linked[cur];
-
-    visited[cur] = true;
-    int cur_max1 = 0, cur_max2 = 0;
-    for (size_t i = 0; i < linked_nodes.size(); ++i)
+    if (maxDist < curDist)
     {
-        t_edge  &cur_edge = linked_nodes[i];
-
-        if (visited[cur_edge.to] == true)
-            continue ;
-
-        int tmp = dfs(cur_edge.to, cur_edge.weight);
-
-        if (cur_max1 < tmp)
-            cur_max2 = cur_max1, cur_max1 = tmp;
-        else if (cur_max2 < tmp)
-            cur_max2 = tmp;
+        maxDist = curDist;
+        farthestNode = cur;
     }
 
-    ans = std::max(ans, cur_max1 + cur_max2);
-    return (cur_max1 + cur_weight);
+    visited[cur] = true;
+    for (const t_edge &next : edges[cur])
+    {
+        if (visited[next.v])
+            continue ;
+
+        findFarthestNode(
+            next.v,
+            curDist + next.weight
+        );
+    }
 }
 
 int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
-    t_edge edge;
-    int    root = 1, v;
-
-    std::cin >> v_cnt;
-    for (int i = 0; i < v_cnt; ++i)
+    std::cin >> vCnt;
+    for (int i = 0; i < vCnt; ++i)
     {
-        std::cin >> v;
+        int from, to, weight;
+
+        std::cin >> from;
         while (1)
         {
-            std::cin >> edge.to;
-            if (edge.to == -1)
+            std::cin >> to;
+            if (to == -1)
                 break ;
-            std::cin >> edge.weight;
-            linked[v].push_back(edge);
+
+            std::cin >> weight;
+            edges[from].push_back({to, weight});
         }
     }
 
-    dfs(root, 0);
-    std::cout << ans << '\n';
+    findFarthestNode();
 
+    maxDist = 0;
+    for (int v = 1; v <= vCnt; ++v)
+    {
+        visited[v] = false;
+    }
+    findFarthestNode(farthestNode);
+
+    std::cout << maxDist << '\n';
     return (0);
 }
