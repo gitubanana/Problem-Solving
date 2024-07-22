@@ -22,7 +22,7 @@ struct t_edge
 
 const int MAX_V = 1001;
 
-int vCnt;
+int madeEcnt, vCnt;
 int parents[MAX_V];
 t_pos pos[MAX_V];
 
@@ -64,14 +64,19 @@ double kruskal(void)
     }
     std::sort(sorted.begin(), sorted.end());
 
+    int eLimit = vCnt - 1;
     double totalWeight = 0;
     for (const t_edge &cur : sorted)
     {
         if (getParent(cur.from) != getParent(cur.to))
         {
             group(cur.from, cur.to);
+            ++madeEcnt;
             totalWeight += cur.weight;
         }
+
+        if (madeEcnt == eLimit)
+            break ;
     }
 
     return (totalWeight);
@@ -98,6 +103,7 @@ int main(void)
         if (getParent(from) != getParent(to))
         {
             group(from, to);
+            ++madeEcnt;
         }
     }
 
