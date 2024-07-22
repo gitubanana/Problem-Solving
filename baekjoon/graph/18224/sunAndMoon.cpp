@@ -4,6 +4,11 @@
 struct t_pos
 {
     int y, x;
+
+    inline bool operator==(const t_pos &other) const
+    {
+        return (this->y == other.y && this->x == other.x);
+    }
 };
 
 const int MAX_MOVE = 10;
@@ -25,6 +30,8 @@ inline bool isBound(const t_pos &pos)
 
 void    bfs(void)
 {
+    static const t_pos end = {size - 1, size - 1};
+
     int day = 1;
     int move = 0;
     bool isDay = true;
@@ -87,7 +94,7 @@ void    bfs(void)
                         continue ;
                 }
 
-                if (next.y == size - 1 && next.x == size - 1)
+                if (next == end)
                 {
                     std::cout << day << ' ' << msg[isDay] << '\n';
                     return ;
