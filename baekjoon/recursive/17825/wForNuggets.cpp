@@ -1,120 +1,137 @@
 #include <iostream>
+#include <vector>
+#include <memory>
 
 struct t_space
 {
-    struct t_space *nextFromStart;
-    struct t_space *next;
-    int toAdd;
+    static std::vector<std::shared_ptr<t_space>> allObjects;
+
+    int num;
+    t_space *next;
+    t_space *nextFromStart;
+
+    t_space(int num, t_space *next, t_space *nextFromStart)
+        : num(num), next(next), nextFromStart(nextFromStart)
+    {
+        allObjects.emplace_back(this);
+    }
 };
 
 const int HORSE_CNT = 4;
-const int MOVE_CNT = 10;
-const int END = 0;
-const int START = -1;
+const int DEPTH_LIMIT = 10;
+t_space *end;
 
 int ans;
-int moveNum[MOVE_CNT];
-t_space *horses[HORSE_CNT];
+int move[DEPTH_LIMIT];
+t_space *horse[HORSE_CNT];
+std::vector<std::shared_ptr<t_space>> t_space::allObjects;
 
-void    initSpace(void)
+void    buildMap(void)
 {
-    t_space *end = new t_space({NULL, NULL, END});
-    t_space *fourty = new t_space({end, end, 40});
+    end = new t_space(0, NULL, NULL);
+    t_space *fourty = new t_space(40, end, end);
 
-    // down from fourty (before 22)
-    t_space *thirtyFive = new t_space({fourty, fourty, 35});
-    t_space *thirty = new t_space({thirtyFive, thirtyFive, 30});
-    t_space *twentyFive = new t_space({thirty, thirty, 25});
-    t_space *twentyFour = new t_space({twentyFive, twentyFive, 24});
-    t_space *twentyTwo = new t_space({twentyFour, twentyFour, 22});
+    // 30 윗 부분
+    t_space *thirtyEight = new t_space(38, fourty, fourty);
+    t_space *thirtySix = new t_space(36, thirtyEight, thirtyEight);
+    t_space *thirtyFour = new t_space(34, thirtySix, thirtySix);
+    t_space *thirtyTwo = new t_space(32, thirtyFour, thirtyFour);
 
-    // right side of 25 (before 30)
-    t_space *twentySix = new t_space({twentyFive, twentyFive, 26});
-    t_space *twentySeven = new t_space({twentySix, twentySix, 27});
-    t_space *twentyEight = new t_space({twentySeven, twentySeven, 28});
+    // 40 아랫 부분
+    t_space *thirtyFive = new t_space(35, fourty, fourty);
+    t_space *thirty = new t_space(30, thirtyFive, thirtyFive);
+    t_space *twentyFive = new t_space(25, thirty, thirty);
+    t_space *twentyFour = new t_space(24, twentyFive, twentyFive);
+    t_space *twentyTwo = new t_space(22, twentyFour, twentyFour);
 
-    // right side of end
-    t_space *thirtyEight = new t_space({fourty, fourty, 38});
-    t_space *thirtySix = new t_space({thirtyEight, thirtyEight, 36});
-    t_space *thirtyFour = new t_space({thirtySix, thirtySix, 34});
-    t_space *thirtyTwo = new t_space({thirtyFour, thirtyFour, 32});
-    t_space *thirty2 = new t_space({twentyEight, thirtyTwo, 30});
-    t_space *twentyEight2 = new t_space({thirty2, thirty2, 28});
-    t_space *twentySix2 = new t_space({twentyEight2, twentyEight2, 26});
-    t_space *twentyFour2 = new t_space({twentySix2, twentySix2, 24});
-    t_space *twentyTwo2 = new t_space({twentyFour2, twentyFour2, 22});
-    t_space *twenty = new t_space({twentyTwo, twentyTwo2, 20});
+    // 25 오른쪽 부분
+    t_space *twentySix = new t_space(26, twentyFive, twentyFive);
+    t_space *twentySeven = new t_space(27, twentySix, twentySix);
+    t_space *twentyEight = new t_space(28, twentySeven, twentySeven);
+    t_space *thirty2 = new t_space(30, thirtyTwo, twentyEight);
 
-    // left side of 20 (before 10)
-    t_space *eighteen = new t_space({twenty, twenty, 18});
-    t_space *sixteen = new t_space({eighteen, eighteen, 16});
-    t_space *fourteen = new t_space({sixteen, sixteen, 14});
-    t_space *twelve = new t_space({fourteen, fourteen, 12});
+    // 20 오른쪽 부분
+    t_space *twentyEight2 = new t_space(28, thirty2, thirty2);
+    t_space *twentySix2 = new t_space(26, twentyEight2, twentyEight2);
+    t_space *twentyFour2 = new t_space(24, twentySix2, twentySix2);
+    t_space *twentyTwo2 = new t_space(22, twentyFour2, twentyFour2);
+    t_space *twenty = new t_space(20, twentyTwo2, twentyTwo);
 
-    // left side of 25
-    t_space *nineteen = new t_space({twentyFive, twentyFive, 19});
-    t_space *sixteen2 = new t_space({nineteen, nineteen, 16});
-    t_space *thirteen = new t_space({sixteen2, sixteen2, 13});
-    t_space *ten = new t_space({thirteen, twelve, 10});
+    // 20 왼쪽 부분
+    t_space *eighteen = new t_space(18, twenty, twenty);
+    t_space *sixteen = new t_space(16, eighteen, eighteen);
+    t_space *fourteen = new t_space(14, sixteen, sixteen);
+    t_space *twelve = new t_space(12, fourteen, fourteen);
 
-    // up side of 10
-    t_space *eight = new t_space({ten, ten, 8});
-    t_space *six = new t_space({eight, eight, 6});
-    t_space *four = new t_space({six, six, 4});
-    t_space *two = new t_space({four, four, 2});
-    t_space *start = new t_space({two, two, START});
+    // 25 왼쪽 부분
+    t_space *nineteen = new t_space(19, twentyFive, twentyFive);
+    t_space *sixteen2 = new t_space(16, nineteen, nineteen);
+    t_space *thirteen = new t_space(13, sixteen2, sixteen2);
+    t_space *ten = new t_space(10, twelve, thirteen);
 
+    // 10 윗 부분
+    t_space *eight = new t_space(8, ten, ten);
+    t_space *six = new t_space(6, eight, eight);
+    t_space *four = new t_space(4, six, six);
+    t_space *two = new t_space(2, four, four);
+
+    t_space *start = new t_space(0, two, two);
     for (int i = 0; i < HORSE_CNT; ++i)
     {
-        horses[i] = start;
+        horse[i] = start;
     }
 }
 
-inline bool moveHorse(int moveIdx, int moveCnt)
+t_space *moveHorse(t_space *cur, int moveCnt)
 {
-    t_space *&toMove = horses[moveIdx];
+    cur = cur->nextFromStart;
+    while (--moveCnt && cur != end)
+    {
+        cur = cur->next;
+    }
 
-    if (toMove->toAdd == END)
+    return (cur);
+}
+
+bool isTheSame(t_space *cmp, int num)
+{
+    if (cmp == end)
         return (false);
 
-    toMove = toMove->nextFromStart;
-    while (--moveCnt)
-    {
-        if (toMove->toAdd == END)
-            return (true);
-        toMove = toMove->next;
-    }
-
     for (int i = 0; i < HORSE_CNT; ++i)
     {
-        if (i == moveIdx)
+        if (i == num)
             continue ;
 
-        if (toMove == horses[i])
-            return (false);
+        if (horse[i] == cmp)
+            return (true);
     }
-    return (true);
+    return (false);
 }
 
-void    back_tracking(int curScore=0, int depth=0)
+void    backTracking(int curScore=0, int depth=0)
 {
-    if (depth == MOVE_CNT)
+    if (depth == DEPTH_LIMIT)
     {
         ans = std::max(ans, curScore);
         return ;
     }
 
-    for (int i = 0; i < HORSE_CNT; ++i)
+    for (int num = 0; num < HORSE_CNT; ++num)
     {
-        t_space *origin = horses[i];
-        t_space *&toMove = horses[i];
+        t_space *&cur = horse[num];
+        if (cur == end)
+            continue ;
 
-        if (moveHorse(i, moveNum[depth]))
-        {
-            back_tracking(curScore + toMove->toAdd, depth + 1);
-        }
+        t_space *next = moveHorse(cur, move[depth]);
+        if (isTheSame(next, num))
+            continue ;
 
-        toMove = origin;
+        t_space *origin = cur;
+
+        cur = next;
+        backTracking(curScore + cur->num, depth + 1);
+        cur = origin;
     }
 }
 
@@ -122,16 +139,13 @@ int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
-    for (int i = 0; i < MOVE_CNT; ++i)
+    buildMap();
+    for (int i = 0; i < DEPTH_LIMIT; ++i)
     {
-        std::cin >> moveNum[i];
+        std::cin >> move[i];
     }
 
-    initSpace();
-    back_tracking();
-
+    backTracking();
     std::cout << ans << '\n';
-
-    // del pointers (귀찮다???)
-    return (0);
+    return 0;
 }
