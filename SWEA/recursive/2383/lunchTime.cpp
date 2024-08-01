@@ -77,13 +77,13 @@ int calculateTime(int sIdx, bool value)
     if (line.empty())
         return (0);
 
-    int curTime = line.front();
+    int curTime;
     int &stairLen = map[stairs[sIdx].y][stairs[sIdx].x];
     while (!line.empty())
     {
         int popCnt = 0;
 
-        ++curTime;
+        curTime = line.front() + stairLen + 1;
         for (int i = 0; i < DOWN_LIMIT; ++i)
         {
             if (i >= line.size() || curTime - line[i] <= stairLen)
