@@ -32,20 +32,6 @@ bool visited[SIZE][SIZE];
 int map[SIZE][SIZE][USER_CNT];
 int moveDirs[USER_CNT][MAX_MOVE];
 
-void    clearMap(void)
-{
-    for (int y = 0; y < SIZE; ++y)
-    {
-        for (int x = 0; x < SIZE; ++x)
-        {
-            for (int i = 0; i < USER_CNT; ++i)
-            {
-                map[y][x][i] = EMPTY;
-            }
-        }
-    }
-}
-
 void    setMap(int arr[2], int cIdx)
 {
     int &curPower = powers[cIdx];
@@ -174,7 +160,7 @@ int main(void)
             }
         }
 
-        clearMap();
+        memset(map, 0, sizeof(map));
         for (int c = 1; c <= chargerCnt; ++c)
         {
             int y, x, dist;
