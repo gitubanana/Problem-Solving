@@ -1,7 +1,6 @@
 #include <iostream>
+#include <cstring>
 #include <vector>
-#define START_TIME 3
-#define SCENT_REMOVE_TIME 2
 #define CURMAP map[curIdx]
 #define NEXTMAP map[nextIdx]
 
@@ -9,153 +8,184 @@ struct t_pos
 {
     int y, x;
 
+    inline bool operator==(const t_pos &other) const
+    {
+        return (this->y == other.y && this->x == other.x);
+    }
+
     inline bool operator!=(const t_pos &other) const
     {
-        return (this->y != other.y || this->x != other.x);
+        return !(*this == other);
     }
 };
 
 const int SIZE = 4;
-const int SHARK_MOVE_CNT = 3;
-const int fDy[] = {0, -1, -1, -1, 0, 1, 1, 1};
-const int fDx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
-const int fDirSize = sizeof(fDy) / sizeof(fDy[0]);
-const int sDy[] = {-1, 0, 1, 0};
-const int sDx[] = {0, -1, 0, 1};
-const int sDirSize = sizeof(sDy) / sizeof(sDy[0]);
+const int dy[] = {0, -1, -1, -1, 0, 1, 1, 1};
+const int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
+int maxEat;
+t_pos pacMan;
 int curTime;
 int curIdx, nextIdx;
-int scentTime[SIZE][SIZE];
+std::vector<t_pos> ate, cmp;
 int visited[SIZE][SIZE];
-std::vector<int> map[2][SIZE][SIZE];
-t_pos shark;
-int maxEatCnt;
-int cmpDirs[SHARK_MOVE_CNT];
-int moveDirs[SHARK_MOVE_CNT];
+int deadTime[SIZE][SIZE];
+int map[2][SIZE][SIZE][dirSize];
 
-inline std::istream &operator>>(std::istream &in, t_pos &input)
+inline std::istream &operator>>(std::istream &cin, t_pos &input)
 {
-    in >> input.y >> input.x;
+    cin >> input.y >> input.x;
     --input.y, --input.x;
-    return (in);
+    return (cin);
 }
 
-inline bool isFishScent(const t_pos &pos)
+inline bool inRange(const t_pos &pos)
 {
-    return (curTime - scentTime[pos.y][pos.x] <= SCENT_REMOVE_TIME);
+    return ((0 <= pos.y && pos.y < SIZE)
+            && (0 <= pos.x && pos.x < SIZE));
 }
 
-void moveFish(const t_pos &cur, int nextDir)
+inline bool isDead(const t_pos &pos)
 {
-    for (int i = 0; i < fDirSize; ++i)
-    {
-        t_pos next = {cur.y + fDy[nextDir], cur.x + fDx[nextDir]};
+    static const int LAST_TIME = 2;
 
-        if ((0 <= next.y && next.y < SIZE)
-            && (0 <= next.x && next.x < SIZE)
-            && !isFishScent(next)
-            && next != shark)
-        {
-            NEXTMAP[next.y][next.x].push_back(nextDir);
-            return ;
-        }
-        nextDir = (nextDir == 0 ? fDirSize - 1 : nextDir - 1);
-    }
+    int &cmpTime = deadTime[pos.y][pos.x];
+    if (cmpTime == 0)
+        return (false);
 
-    NEXTMAP[cur.y][cur.x].push_back(nextDir);
+    return (curTime - cmpTime <= LAST_TIME);
 }
 
-void    moveFishes(void)
-{
-    t_pos cur;
-
-    for (cur.y = 0; cur.y < SIZE; ++cur.y)
-    {
-        for (cur.x = 0; cur.x < SIZE; ++cur.x)
-        {
-            for (const int &fishDir : CURMAP[cur.y][cur.x])
-            {
-                moveFish(cur, fishDir);
-            }
-        }
-    }
-}
-
-void    backTracking(t_pos cur, int curEatCnt=0, int depth=0)
-{
-    if (depth == SHARK_MOVE_CNT)
-    {
-        if (maxEatCnt < curEatCnt)
-        {
-            maxEatCnt = curEatCnt;
-            for (int i = 0; i < SHARK_MOVE_CNT; ++i)
-            {
-                moveDirs[i] = cmpDirs[i];
-            }
-        }
-        return ;
-    }
-
-    for (int dir = 0; dir < sDirSize; ++dir)
-    {
-        t_pos next = {cur.y + sDy[dir], cur.x + sDx[dir]};
-
-        if (!(0 <= next.y && next.y < SIZE)
-            || !(0 <= next.x && next.x < SIZE))
-            continue ;
-
-        int nextEatCnt = curEatCnt +
-            (NEXTMAP[next.y][next.x].size() * !visited[next.y][next.x]);
-
-        ++visited[next.y][next.x];
-        cmpDirs[depth] = dir;
-        backTracking(
-            next,
-            nextEatCnt,
-            depth + 1
-        );
-        --visited[next.y][next.x];
-    }
-}
-
-void    moveShark(void)
-{
-    maxEatCnt = -1;
-    backTracking(shark);
-
-    for (int i = 0; i < SHARK_MOVE_CNT; ++i)
-    {
-        const int &dir = moveDirs[i];
-
-        shark.y += sDy[dir];
-        shark.x += sDx[dir];
-
-        if (NEXTMAP[shark.y][shark.x].size())
-        {
-            scentTime[shark.y][shark.x] = curTime;
-        }
-        NEXTMAP[shark.y][shark.x].clear();
-    }
-}
-
-void    duplicateFishes(void)
+void    moveMonsters(void)
 {
     for (int y = 0; y < SIZE; ++y)
     {
         for (int x = 0; x < SIZE; ++x)
         {
-            for (const int &fishDir : CURMAP[y][x])
+            for (int dir = 0; dir < dirSize; ++dir)
             {
-                NEXTMAP[y][x].push_back(fishDir);
-            }
+                int curDir = dir;
+                int dirCnt = dirSize;
+                t_pos next = {y, x};
 
-            CURMAP[y][x].clear();
+                while (dirCnt--)
+                {
+                    t_pos check = {
+                        y + dy[curDir],
+                        x + dx[curDir]
+                    };
+
+                    if (inRange(check)
+                        && check != pacMan
+                        && !isDead(check))
+                    {
+                        next = check;
+                        break ;
+                    }
+
+                    curDir = (curDir + dirSize - 1) % dirSize;
+                }
+
+                NEXTMAP[next.y][next.x][curDir] += CURMAP[y][x][dir];
+            }
         }
     }
 }
 
-int countFishes(void)
+int getNextEat(const t_pos &pos)
+{
+    int eat = 0;
+
+    for (int dir = 0; dir < dirSize; ++dir)
+    {
+        eat += NEXTMAP[pos.y][pos.x][dir];
+    }
+    return (eat);
+}
+
+void    backTracking(const t_pos &cur, int curEat=0, int depth=0)
+{
+    static const int DEPTH_LIMIT = 3;
+    static const int dy[] = {-1, 0, 1, 0};
+    static const int dx[] = {0, -1, 0, 1};
+    static const int dirSize = sizeof(dy) / sizeof(dy[0]);
+
+    if (depth == DEPTH_LIMIT)
+    {
+        if (maxEat < curEat)
+        {
+            maxEat = curEat;
+            pacMan = cur;
+            ate = cmp;
+        }
+        return ;
+    }
+
+    for (int dir = 0; dir < dirSize; ++dir)
+    {
+        t_pos next = {
+            cur.y + dy[dir],
+            cur.x + dx[dir]
+        };
+
+        if (!inRange(next))
+            continue ;
+
+        int &nextVisited = visited[next.y][next.x];
+        int nextEat = (nextVisited ? 0 : getNextEat(next));
+
+        ++nextVisited;
+        cmp.push_back(next);
+
+        backTracking(
+            next,
+            curEat + nextEat,
+            depth + 1
+        );
+
+        --nextVisited;
+        cmp.pop_back();
+    }
+}
+
+void    movePacMan(void)
+{
+    maxEat = -1;
+    t_pos start = pacMan;
+
+    backTracking(start);
+    for (const t_pos &pos : ate)
+    {
+        for (int dir = 0; dir < dirSize; ++dir)
+        {
+            int &curCnt = NEXTMAP[pos.y][pos.x][dir];
+
+            if (curCnt)
+            {
+                curCnt = 0;
+                deadTime[pos.y][pos.x] = curTime;
+            }
+        }
+    }
+}
+
+void    duplicateMonsters(void)
+{
+    for (int y = 0; y < SIZE; ++y)
+    {
+        for (int x = 0; x < SIZE; ++x)
+        {
+            for (int dir = 0; dir < dirSize; ++dir)
+            {
+                NEXTMAP[y][x][dir] += CURMAP[y][x][dir];
+                CURMAP[y][x][dir] = 0;
+            }
+        }
+    }
+}
+
+int getMonsterCnt(void)
 {
     int cnt = 0;
 
@@ -163,7 +193,10 @@ int countFishes(void)
     {
         for (int x = 0; x < SIZE; ++x)
         {
-            cnt += CURMAP[y][x].size();
+            for (int dir = 0; dir < dirSize; ++dir)
+            {
+                cnt += CURMAP[y][x][dir];
+            }
         }
     }
     return (cnt);
@@ -173,31 +206,31 @@ int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
-    int fishDir;
-    t_pos fishPos;
-    int fishCnt, practiceTime;
+    int monsterCnt, turn;
 
-    std::cin >> fishCnt >> practiceTime;
-    while (fishCnt--)
+    std::cin >> monsterCnt >> turn;
+    while (monsterCnt--)
     {
-        std::cin >> fishPos >> fishDir;
-        --fishDir;
-        CURMAP[fishPos.y][fishPos.x].push_back(fishDir);
+        int dir;
+        t_pos pos;
+
+        std::cin >> pos >> dir;
+        ++CURMAP[pos.y][pos.x][dir - 1];
     }
-    std::cin >> shark;
+    std::cin >> pacMan;
 
-    curTime = START_TIME;
-    practiceTime += START_TIME;
-    while (curTime < practiceTime)
+    while (turn--)
     {
-        nextIdx = (curIdx + 1) % 2;
-        moveFishes();
-        moveShark();
-        duplicateFishes();
-        curIdx = nextIdx;
         ++curTime;
+        nextIdx = curIdx ^ 1;
+
+        moveMonsters();
+        movePacMan();
+        duplicateMonsters();
+
+        curIdx = nextIdx;
     }
 
-    std::cout << countFishes() << '\n';
-    return (0);
+    std::cout << getMonsterCnt() << '\n';
+    return 0;
 }
