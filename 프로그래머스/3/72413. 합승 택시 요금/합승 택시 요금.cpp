@@ -18,9 +18,6 @@ void floyd(int vCnt)
         {
             for (int to = 1; to <= vCnt; ++to)
             {
-                if (from == to)
-                    continue ;
-
                 int &cmpDist = dists[from][to];
                 int nextDist = dists[from][mid] + dists[mid][to];
                 if (cmpDist > nextDist)
@@ -37,6 +34,9 @@ int solution(int vCnt, int s, int a, int b, vector<vector<int>> fares) {
     {
         for (int to = 1; to <= vCnt; ++to)
         {
+            if (from == to)
+                continue ;
+
             dists[from][to] = INF;
         }
     }
@@ -51,12 +51,7 @@ int solution(int vCnt, int s, int a, int b, vector<vector<int>> fares) {
 
     floyd(vCnt);
 
-    int answer = std::min({
-        dists[s][a] + dists[s][b],
-        dists[s][a] + dists[a][b],
-        dists[s][b] + dists[b][a]
-    });
-
+    int answer = INF;
     for (int mid = 1; mid <= vCnt; ++mid)
     {
         answer = std::min(
