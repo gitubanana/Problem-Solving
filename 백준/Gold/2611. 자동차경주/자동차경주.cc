@@ -11,9 +11,9 @@ struct t_edge
 const int MAX_V = 1001;
 
 int vCnt;
+int prev[MAX_V];
 int dists[MAX_V];
 int indegree[MAX_V];
-std::vector<int> path[MAX_V];
 std::vector<t_edge> edges[MAX_V];
 
 void    topologicalSort(int start=1)
@@ -21,14 +21,13 @@ void    topologicalSort(int start=1)
     std::queue<int> q;
 
     q.push(start);
-    path[start].push_back(start);
     while (!q.empty())
     {
-        const int curV = q.front();
-        const int &curDist = dists[curV];
+        const int cur = q.front();
+        const int &curDist = dists[cur];
         q.pop();
 
-        for (const t_edge &next : edges[curV])
+        for (const t_edge &next : edges[cur])
         {
             int &cmpDist = dists[next.v];
             int nextDist = curDist + next.weight;
@@ -36,11 +35,10 @@ void    topologicalSort(int start=1)
             if (cmpDist < nextDist)
             {
                 cmpDist = nextDist;
-                path[next.v] = path[curV];
-                path[next.v].push_back(next.v);
+                prev[next.v] = cur;
             }
 
-            if (--indegree[next.v])
+            if (--indegree[next.v] || next.v == start)
                 continue ;
 
             q.push(next.v);
@@ -50,10 +48,20 @@ void    topologicalSort(int start=1)
 
 void    printAns(int start=1)
 {
-    std::cout << dists[start] << '\n';
-    for (const int &cur : path[start])
+    int cur = start;
+    std::vector<int> path;
+
+    do
     {
-        std::cout << cur << ' ';
+        path.push_back(cur);
+        cur = prev[cur];
+    } while (cur != start);
+    path.push_back(start);
+
+    std::cout << dists[start] << '\n';
+    for (int i = path.size() - 1; i >= 0; --i)
+    {
+        std::cout << path[i] << ' ';
     }
     std::cout << '\n';
 }
