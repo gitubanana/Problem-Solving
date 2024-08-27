@@ -38,7 +38,7 @@ void    topologicalSort(void)
 
     if (order.size() != vCnt)
     {
-        std::cout << "0" << '\n';
+        std::cout << '0' << '\n';
         return ;
     }
 
