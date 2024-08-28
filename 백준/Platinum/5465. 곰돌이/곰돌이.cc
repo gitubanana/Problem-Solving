@@ -112,7 +112,7 @@ bool canGoHome(const t_pos &start, int curTime)
             const t_pos check = q.front();
             q.pop();
 
-            if (beeTime[check.y][check.x] <= curTime)
+            if (beeTime[check.y][check.x] == curTime)
                 continue ;
 
             q.push(check);
