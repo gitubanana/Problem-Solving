@@ -7,21 +7,19 @@ using namespace std;
 
 const int MAX_V = 101;
 
-bool visited[MAX_V];
-bool checked[MAX_V][MAX_V];
+int connectCnt[MAX_V];
 std::vector<int> edges[MAX_V];
 
-void    dfs(int cur, int &cnt)
+void    dfs(int cur=1, int prev=-1)
 {
-    ++cnt;
-    visited[cur] = true;
-
+    connectCnt[cur] = 1;
     for (const int &next : edges[cur])
     {
-        if (visited[next])
+        if (next == prev)
             continue ;
 
-        dfs(next, cnt);
+        dfs(next, cur);
+        connectCnt[cur] += connectCnt[next];
     }
 }
 
@@ -36,28 +34,14 @@ int solution(int vCnt, vector<vector<int>> wires) {
     }
 
     int answer = INT_MAX;
+
+    dfs();
     for (int v = 1; v <= vCnt; ++v)
     {
-        for (const int &cut : edges[v])
-        {
-            if (checked[v][cut])
-                continue ;
-
-            memset(visited, false, sizeof(visited));
-            visited[v] = visited[cut] = true;
-            checked[cut][v] = true;
-
-            int a = 0, b = 0;
-
-            dfs(v, a);
-            dfs(cut, b);
-
-            answer = std::min(
-                answer,
-                std::abs(a - b)
-            );
-        }
+        answer = std::min(
+            answer,
+            std::abs(connectCnt[v] - (vCnt - connectCnt[v]))
+        );
     }
-
     return answer;
 }
