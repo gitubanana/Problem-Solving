@@ -63,6 +63,9 @@ void    moveBees(void)
 
 bool canGoHome(const t_pos &start, int curTime)
 {
+    if (beeTime[start.y][start.x] <= curTime)
+        return (false);
+
     std::queue<t_pos> q;
 
     memset(visited, false, sizeof(visited));
@@ -72,6 +75,7 @@ bool canGoHome(const t_pos &start, int curTime)
     {
         int move = movePerMin;
 
+        ++curTime;
         while (!q.empty() && move--)
         {
             int qSize = q.size();
@@ -80,9 +84,6 @@ bool canGoHome(const t_pos &start, int curTime)
             {
                 const t_pos cur = q.front();
                 q.pop();
-
-                if (beeTime[cur.y][cur.x] <= curTime)
-                    continue ;
 
                 for (int dir = 0; dir < dirSize; ++dir)
                 {
@@ -93,6 +94,7 @@ bool canGoHome(const t_pos &start, int curTime)
 
                     if (!inRange(next)
                         || map[next.y][next.x] == WALL
+                        || beeTime[next.y][next.x] < curTime
                         || visited[next.y][next.x])
                         continue ;
 
@@ -105,7 +107,16 @@ bool canGoHome(const t_pos &start, int curTime)
             }
         }
 
-        ++curTime;
+        for (int qSize = q.size(); qSize--; )
+        {
+            const t_pos check = q.front();
+            q.pop();
+
+            if (beeTime[check.y][check.x] <= curTime)
+                continue ;
+
+            q.push(check);
+        }
     }
 
     return (false);
