@@ -27,13 +27,10 @@ void    quadTree(vector<vector<int>> &map,
     int endY = startY + size;
     int endX = startX + size;
 
-    for (int i = 0; i < 2; ++i)
+    if (isAll(map, startY, startX, endY, endX, map[startY][startX]))
     {
-        if (isAll(map, startY, startX, endY, endX, i))
-        {
-            ++cnt[i];
-            return ;
-        }
+        ++cnt[map[startY][startX]];
+        return ;
     }
 
     size /= 2;
