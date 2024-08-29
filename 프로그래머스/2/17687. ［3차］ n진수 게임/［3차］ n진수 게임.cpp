@@ -33,9 +33,16 @@ string solution(int base, int t, int m, int p) {
 
         if (numStr.size() >= p)
         {
-            --t;
-            answer += numStr[numStr.size() - p];
-            p += m - numStr.size();
+            while (numStr.size() >= p)
+            {
+                answer += numStr[numStr.size() - p];
+                p += m;
+                --t;
+                if (t == 0)
+                    break ;
+            }
+
+            p -= numStr.size();
         }
         else
         {
