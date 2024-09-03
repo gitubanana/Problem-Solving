@@ -4,20 +4,26 @@
 using namespace std;
 
 int answer;
+int *arr;
+int goal;
+int depthLimit;
 
-void    dfs(vector<int> &numbers, int target, int curNum=0, int depth=0)
+void    dfs(int curNum=0, int depth=0)
 {
-    if (depth == numbers.size())
+    if (depth == depthLimit)
     {
-        answer += (curNum == target);
+        answer += (curNum == goal);
         return ;
     }
 
-    dfs(numbers, target, curNum + numbers[depth], depth + 1);
-    dfs(numbers, target, curNum - numbers[depth], depth + 1);
+    dfs(curNum + arr[depth], depth + 1);
+    dfs(curNum - arr[depth], depth + 1);
 }
 
 int solution(vector<int> numbers, int target) {
-    dfs(numbers, target);
+    arr = &numbers[0];
+    goal = target;
+    depthLimit = numbers.size();
+    dfs();
     return answer;
 }
