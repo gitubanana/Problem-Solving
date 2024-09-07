@@ -19,11 +19,10 @@ const int MAX_V = 5001;
 const int INF = 1e9;
 
 int vCnt;
-int sDist[MAX_V];
-int gDist[MAX_V];
+int dists[MAX_V];
 std::vector<t_edge> edges[MAX_V];
 
-void    dijkstra(int start, int dists[MAX_V])
+void    dijkstra(int start)
 {
     std::priority_queue<t_edge> pq;
 
@@ -73,9 +72,11 @@ int main(void)
         edges[to].push_back({from, weight});
     }
 
-    dijkstra(START, sDist);
-    dijkstra(gunwoo, gDist);
+    dijkstra(START);
+    int sToE = dists[END];
 
-    std::cout << msg[sDist[END] < gDist[START] + gDist[END]] << '\n';
+    dijkstra(gunwoo);
+
+    std::cout << msg[sToE < dists[START] + dists[END]] << '\n';
     return (0);
 }
