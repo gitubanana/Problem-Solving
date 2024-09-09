@@ -25,8 +25,7 @@ bool isEuiclee(int start, int end)
 
     int halfSize = (end - start + 1) / 2;
     return (isPalindrome(start, end)
-            && isEuiclee(start, start + halfSize - 1)
-            && isEuiclee(end - halfSize + 1, end));
+            && isEuiclee(start, start + halfSize - 1));
 }
 
 int main(void)
