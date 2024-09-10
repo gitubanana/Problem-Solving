@@ -15,19 +15,14 @@ func main() {
 	defer writer.Flush()
 
 	var num int64
-	var squareOfTwo = 0
 
 	fmt.Fscan(reader, &num)
-	for cmp := int64(1); ; cmp <<= 1 {
-		if cmp > num {
-			break
-		}
-
-		if cmp == num {
-			squareOfTwo = 1
-			break
-		}
+	for ; num & 1 == 0; num >>= 1{
 	}
 
-	fmt.Fprintln(writer, squareOfTwo)
+	if num == 1 {
+		fmt.Fprintln(writer, "1")
+	} else {
+		fmt.Fprintln(writer, "0")
+	}
 }
