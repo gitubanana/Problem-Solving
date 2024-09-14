@@ -8,81 +8,39 @@ const int CYCLE = 0;
 const int DONT_MARK = -1;
 
 int vCnt;
-int cycleEnd;
-bool isCycle[MAX_V];
-bool visited[MAX_V];
+int dists[MAX_V];
+int indegree[MAX_V];
+std::queue<int> q;
 std::vector<int> edges[MAX_V];
 
-bool    dfs(int cur=1, int prev=0)
+void    topologicalSort(void)
 {
-    visited[cur] = true;
-    for (const int &next : edges[cur])
-    {
-        if (next == prev)
-            continue ;
-
-        if (visited[next])
-        {
-            cycleEnd = next;
-            isCycle[cur] = true;
-            return (true);
-        }
-
-        if (dfs(next, cur))
-        {
-            if (cycleEnd != DONT_MARK)
-            {
-                isCycle[cur] = true;
-            }
-
-            if (cycleEnd == cur)
-            {
-                cycleEnd = DONT_MARK;
-            }
-
-            return (true);
-        }
-    }
-
-    return (false);
-}
-
-int bfs(int start)
-{
-    if (isCycle[start])
-        return (0);
-
-    int dist = 0;
-    std::queue<int> q;
-
-    memset(visited, false, sizeof(visited));
-    visited[start] = true;
-    q.push(start);
     while (!q.empty())
     {
-        int qSize = q.size();
+        const int cur = q.front();
+        q.pop();
 
-        ++dist;
-        while (qSize--)
+        for (const int &next : edges[cur])
         {
-            const int cur = q.front();
-            q.pop();
-
-            for (const int &next : edges[cur])
+            int &nextIn = indegree[next];
+            if (--nextIn == 0)
             {
-                if (visited[next])
-                    continue ;
-
-                if (isCycle[next])
-                    return (dist);
-
-                visited[next] = true;
                 q.push(next);
             }
         }
     }
+}
 
-    return (-1);
+void    dfs(int cur)
+{
+    for (const int &next : edges[cur])
+    {
+        if (indegree[next] > 0 || dists[next])
+            continue ;
+
+        dists[next] = dists[cur] + 1;
+        dfs(next);
+    }
 }
 
 int main(void)
@@ -98,18 +56,29 @@ int main(void)
         edges[a].push_back(b);
         edges[b].push_back(a);
     }
+    for (int cur = 1; cur <= vCnt; ++cur)
+    {
+        int &curIn = indegree[cur];
 
-    dfs();
-    // std::cout << "=== isCycle ===" << '\n';
-    // for (int v = 1; v <= vCnt; ++v)
-    // {
-    //     std::cout << isCycle[v] << ' ';
-    // }
-    // std::cout << '\n';
+        curIn = edges[cur].size() - 1;
+        if (curIn == 0)
+        {
+            q.push(cur);
+        }
+    }
+
+    topologicalSort();
+    for (int v = 1; v <= vCnt; ++v)
+    {
+        if (indegree[v] <= 0)
+            continue ;
+
+        dfs(v);
+    }
 
     for (int v = 1; v <= vCnt; ++v)
     {
-        std::cout << bfs(v) << ' ';
+        std::cout << dists[v] << ' ';
     }
     std::cout << '\n';
     return (0);
