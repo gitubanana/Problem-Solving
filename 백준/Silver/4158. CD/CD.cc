@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unordered_set>
+#include <vector>
 
 int main(void)
 {
@@ -14,19 +15,40 @@ int main(void)
             break ;
 
         int cd;
-        std::unordered_set<int> uset;
+        std::vector<int> a;
+        std::vector<int> b;
 
-        while (aCnt--)
+        for (int i = 0; i < aCnt; ++i)
         {
             std::cin >> cd;
-            uset.insert(cd);
+            a.push_back(cd);
+        }
+        for (int i = 0; i < bCnt; ++i)
+        {
+            std::cin >> cd;
+            b.push_back(cd);
         }
 
         int sameCnt = 0;
-        while (bCnt--)
+        int aIdx = 0, bIdx = 0;
+        while (aIdx < aCnt && bIdx < bCnt)
         {
-            std::cin >> cd;
-            sameCnt += (uset.find(cd) != uset.end());
+            const int &aElem = a[aIdx];
+            const int &bElem = b[bIdx];
+
+            if (aElem < bElem)
+            {
+                ++aIdx;
+            }
+            else if (aElem > bElem)
+            {
+                ++bIdx;
+            }
+            else
+            {
+                ++sameCnt;
+                ++aIdx, ++bIdx;
+            }
         }
 
         std::cout << sameCnt << '\n';
