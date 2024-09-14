@@ -5,17 +5,19 @@
 struct t_edge
 {
     int v;
-    int64_t weight;
+    int weight;
+};
 
-    inline bool operator<(const t_edge &other) const
+struct t_elem
+{
+    int v;
+    int64_t weight;
+    bool passed;
+
+    inline bool operator<(const t_elem &other) const
     {
         return (this->weight > other.weight);
     }
-};
-
-struct t_elem : public t_edge
-{
-    bool passed;
 };
 
 const int MAX_V = 100'001;
