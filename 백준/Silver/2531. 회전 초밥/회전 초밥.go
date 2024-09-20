@@ -46,10 +46,10 @@ func main() {
 		tCnt[arr[cur]]++
 		maxType = max(maxType, getTypeCnt(tCnt))
 
-		prev = (prev + 1) % arrSize
-		if prev == 0 {
+		if cur == windowSize - 2 {
 			break
 		}
+		prev++
 	}
 
 	fmt.Fprintln(writer, maxType)
