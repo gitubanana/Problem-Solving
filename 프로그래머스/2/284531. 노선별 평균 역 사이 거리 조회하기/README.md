@@ -1,3 +1,7 @@
+# 주의할 점
+`ORDER BY`에서 문자열을 기준으로 정렬해서 계속 틀렸다.<br>
+실수하기 쉬운 부분이기 때문에, 주의해야겠다!
+
 # [level 2] 노선별 평균 역 사이 거리 조회하기 - 284531 
 
 [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/284531) 
