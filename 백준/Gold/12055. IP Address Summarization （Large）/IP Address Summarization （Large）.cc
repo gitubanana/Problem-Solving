@@ -11,9 +11,8 @@ struct t_trie
 {
     std::shared_ptr<t_trie> next[2];
     bool isIp;
-    bool partOfIp;
 
-    t_trie() : isIp(false), partOfIp(false) { }
+    t_trie() : isIp(false) { }
 };
 
 using p_trie = std::shared_ptr<t_trie>;
