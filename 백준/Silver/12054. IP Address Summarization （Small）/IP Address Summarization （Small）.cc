@@ -11,14 +11,12 @@ struct t_trie
 {
     std::shared_ptr<t_trie> next[2];
     bool isIp;
-    bool partOfIp;
 
-    t_trie() : isIp(false), partOfIp(false) { }
+    t_trie() : isIp(false) { }
 };
 
 using p_trie = std::shared_ptr<t_trie>;
 
-// 0.0.0.0/0도 생각!
 void    addTrie(p_trie &root, int ip, int prefix)
 {
     p_trie cur = root;
@@ -59,15 +57,10 @@ void    mergeIp(p_trie &cur)
         mergeIp(nextOne);
     }
 
-    if ((nextZero != NULL && nextZero->isIp | nextZero->partOfIp)
-        && (nextOne != NULL && nextOne->isIp | nextOne->partOfIp))
+    if ((nextZero != NULL && nextZero->isIp)
+        && (nextOne != NULL && nextOne->isIp))
     {
         cur->isIp = true;
-    }
-    else if ((nextZero != NULL && nextZero->isIp)
-            || (nextOne != NULL && nextOne->isIp))
-    {
-        cur->partOfIp = true;
     }
 }
 
@@ -136,7 +129,7 @@ int main(void)
             int ip = (a << 24) | (b << 16) | (c << 8) | d;
             addTrie(root, ip, prefix);
         }
-        
+
         printf("Case #%d:\n", t);
         mergeIp(root);
         printTrie(root);
