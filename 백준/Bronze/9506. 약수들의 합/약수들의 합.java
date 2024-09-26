@@ -9,36 +9,21 @@ import java.util.StringTokenizer;
 public class Main {
 
     public static void printLine(int num) {
-        int sum = 0;
-        ArrayList<Integer> aliquots = new ArrayList<>();
+        int sum = 1;
+        final int halfNum = num / 2;
+        StringBuilder result = new StringBuilder(num+" = 1");
 
-        for (int aliquot = 1; aliquot * aliquot <= num; ++aliquot) {
-            if (num % aliquot == 0) {
-                int otherOne = num / aliquot;
-
-                sum += aliquot;
-                aliquots.add(aliquot);
-                if (aliquot != otherOne) {
-                    sum += otherOne;
-                    aliquots.add(otherOne);
-                }
+        for (int n = 2; n <= halfNum; ++n) {
+            if (num % n == 0) {
+                sum += n;
+                result.append(" + "+n);
             }
         }
 
-        if (sum - num != num) {
-            System.out.printf("%d is NOT perfect.\n", num);
+        if (sum != num) {
+            System.out.println(num+" is NOT perfect.");
         } else {
-            aliquots.sort(Comparator.naturalOrder());
-            aliquots.remove(aliquots.size() - 1);
-
-            System.out.printf("%d = ", num);
-            for (int i = 0; i < aliquots.size(); ++i) {
-                System.out.print(aliquots.get(i));
-                if (i != aliquots.size() - 1) {
-                    System.out.print(" + ");
-                }
-            }
-            System.out.println();
+            System.out.println(result);
         }
     }
 
