@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 public class Main {
     final static char ICECREAM = '#';
+    final static char VISITED = '!';
     final static int[] dy = {-1, 1, 0, 0};
     final static int[] dx = {0, 0, -1, 1};
     final static int dirSize = 4;
@@ -15,29 +16,32 @@ public class Main {
     static int size;
     static int maxArea, cmpArea;
     static int minPerimeter, cmpPerimeter;
-    static ArrayList<String> map = new ArrayList<>();
-    static boolean[][] visited;
+    static char[][] map;
 
     public static void dfs(int y, int x) {
         ++cmpArea;
-        visited[y][x] = true;
+        map[y][x] = VISITED;
 
         for (int dir = 0; dir < dirSize; ++dir) {
             int nextY = y + dy[dir];
             int nextX = x + dx[dir];
 
             if (!(0 <= nextY && nextY < size)
-                || !(0 <= nextX && nextX < size)
-                || map.get(nextY).charAt(nextX) != ICECREAM)
+                || !(0 <= nextX && nextX < size))
             {
                 ++cmpPerimeter;
                 continue ;
             }
 
-            if (visited[nextY][nextX])
-                continue ;
-
-            dfs(nextY, nextX);
+            switch (map[nextY][nextX]) {
+                case VISITED:
+                    break;
+                case ICECREAM:
+                    dfs(nextY, nextX);
+                    break;
+                default:
+                    ++cmpPerimeter;
+            }
         }
     }
 
@@ -45,14 +49,14 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         size = Integer.parseInt(br.readLine());
-        visited = new boolean[size][size];
+        map = new char[size][];
         for (int y = 0; y < size; ++y) {
-            map.add(br.readLine());
+            map[y] = br.readLine().toCharArray();
         }
 
         for (int y = 0; y < size; ++y) {
             for (int x = 0; x < size; ++x) {
-                if (map.get(y).charAt(x) != ICECREAM)
+                if (map[y][x] != ICECREAM)
                     continue ;
 
                 cmpArea = cmpPerimeter = 0;
