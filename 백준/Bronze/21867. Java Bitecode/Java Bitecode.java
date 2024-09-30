@@ -19,7 +19,7 @@ public class Main {
             }
         }
 
-        if (result.isEmpty()) {
+        if (result.length() == 0) {
             System.out.println("nojava");
         } else {
             System.out.println(result);
