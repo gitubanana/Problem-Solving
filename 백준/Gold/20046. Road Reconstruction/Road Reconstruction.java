@@ -22,16 +22,14 @@ class Pos implements Comparable<Pos> {
 
 public class Main {
     final static int WALL = -1;
-    final static int EMPTY = 0;
     final static int INF = (int)1e8;
-    final static int MAX_SIZE = 1000;
     final static int[] dy = {-1, 1, 0, 0};
     final static int[] dx = {0, 0, -1, 1};
     final static int dirSize = dy.length;
 
     static int ySize, xSize;
-    static int[][] map = new int[MAX_SIZE][MAX_SIZE];
-    static int[][] dists = new int[MAX_SIZE][MAX_SIZE];
+    static int[][] map;
+    static int[][] dists;
 
     public static int dijkstra() {
         if (map[0][0] == WALL) {
@@ -82,6 +80,8 @@ public class Main {
 
         ySize = Integer.parseInt(firstLine[0]);
         xSize = Integer.parseInt(firstLine[1]);
+        map = new int[ySize][xSize];
+        dists = new int[ySize][xSize];
         for (int y = 0; y < ySize; ++y) {
             String[] line = br.readLine().split(" ");
 
