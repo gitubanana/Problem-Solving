@@ -6,14 +6,13 @@ import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class Main {
-    public enum Status {
+    public enum Stat {
         SKIPPED(0),
         SELECTED(1);
 
-
         private int idx;
 
-        private Status(int idx) {
+        private Stat(int idx) {
             this.idx = idx;
         }
 
@@ -26,8 +25,7 @@ public class Main {
     static int dp[][];
 
     static void dfs(int cur, int prev) {
-        dp[cur][Status.SKIPPED.getIdx()] = 0;
-        dp[cur][Status.SELECTED.getIdx()] = 1;
+        dp[Stat.SELECTED.getIdx()][cur] = 1;
 
         for (Integer next : edges[cur]) {
             if (next == prev) {
@@ -35,10 +33,10 @@ public class Main {
             }
 
             dfs(next, cur);
-            dp[cur][Status.SKIPPED.getIdx()] += dp[next][Status.SELECTED.getIdx()];
-            dp[cur][Status.SELECTED.getIdx()] += Math.min(
-                    dp[next][Status.SKIPPED.getIdx()],
-                    dp[next][Status.SELECTED.getIdx()]
+            dp[Stat.SKIPPED.getIdx()][cur] += dp[Stat.SELECTED.getIdx()][next];
+            dp[Stat.SELECTED.getIdx()][cur] += Math.min(
+                    dp[Stat.SKIPPED.getIdx()][next],
+                    dp[Stat.SELECTED.getIdx()][next]
             );
         }
     }
@@ -60,9 +58,12 @@ public class Main {
             edges[b].add(a);
         }
 
-        dp = new int[vCnt + 1][2];
+        dp = new int[2][vCnt + 1];
         dfs(1, 0);
 
-        System.out.println(Math.min(dp[1][0], dp[1][1]));
+        System.out.println(Math.min(
+                dp[Stat.SKIPPED.getIdx()][1],
+                dp[Stat.SELECTED.getIdx()][1]
+        ));
     }
 }
