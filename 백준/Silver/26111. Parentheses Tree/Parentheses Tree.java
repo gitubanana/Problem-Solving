@@ -23,21 +23,21 @@ public class Main {
 
         public long getDistanceSumToLeaves() {
             long sum = 0;
-            Stack<Character> stack = new Stack<>();
+            int depth = 0;
 
             for (int i = 0; i < tree.length(); ++i) {
                 if (isLeaf(i)) {
-                    sum += stack.size();
+                    sum += depth;
                     ++i;
                     continue;
                 }
 
                 switch (tree.charAt(i)) {
                     case NEW_CHILD :
-                        stack.push(NEW_CHILD);
+                        ++depth;
                         break;
                     case END_CHILD :
-                        stack.pop();
+                        --depth;
                         break;
                 }
             }
