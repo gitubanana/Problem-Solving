@@ -91,11 +91,11 @@ public class Main {
         makeResult(1, startColor, 0);
 
         StringBuilder result = new StringBuilder();
+
+        result.append(beauty[1][startColor]+"\n");
         for (int v = 1; v <= vCnt; ++v) {
             result.append(colorName.charAt(chosenColor[v]));
         }
-
-        System.out.println(beauty[1][startColor]);
         System.out.println(result);
     }
 }
