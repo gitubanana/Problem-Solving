@@ -22,8 +22,8 @@ public class Main {
             getEdges(from).add(to);
         }
 
-        public int getSize() {
-            return edges.length;
+        public int getVcnt() {
+            return edges.length - 1;
         }
     }
 
@@ -39,7 +39,7 @@ public class Main {
 
         public Ruler(Tree tree) {
             this.tree = tree; // 따로 할당하진 않는다. (new 없음)
-            this.dp = new int[tree.getSize()][STATUS_CNT];
+            this.dp = new int[tree.getVcnt() + 1][STATUS_CNT];
         }
 
         private void dfs(int cur, int prev) {
@@ -61,10 +61,6 @@ public class Main {
         }
 
         public int getMinPoliceCnt() {
-            if (tree.getSize() == 2) {
-                return 1;
-            }
-
             dfs(ROOT, VIRTUAL_NODE);
             return Math.min(dp[ROOT][SKIPPED], dp[ROOT][SELECTED]);
         }
