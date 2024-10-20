@@ -32,6 +32,7 @@ class Main {
     public static void main(String[] args) throws Exception {
         int size = Integer.parseInt(br.readLine());
         int myScore = 0;
+        int winScore = (size + 1) / 2;
         Cards mine = new Cards(size);
         Cards yours = new Cards(size);
 
@@ -39,6 +40,10 @@ class Main {
             while (true) {
                 if (mine.winAgainst(yours)) {
                     ++myScore;
+                    if (myScore == winScore) {
+                        System.out.println("YES");
+                        return;
+                    }
                     mine.movePointer();
                 }
 
@@ -48,11 +53,6 @@ class Main {
             // do nothing
         }
 
-        int winScore = (size + 1) / 2;
-        if (myScore >= winScore) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
+        System.out.println("NO");
     }
 }
