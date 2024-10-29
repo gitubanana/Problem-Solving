@@ -3,26 +3,14 @@ import java.lang.*;
 import java.io.*;
 
 class Words {
-    private static final int MAX_WORD_LENGTH = 9;
-
-    private HashMap<String, HashMap<String, String>> words = new HashMap<>();
+    private HashMap<String, String> words = new HashMap<>();
 
     public void add(String word) {
         if (isNotAddable(word)) {
             return;
         }
 
-        String firstAndEnd = makeFirstAndEnd(word);
-
-        if (words.containsKey(firstAndEnd)) {
-            words.get(firstAndEnd).put(sortBetween(word), word);
-            return;
-        }
-
-        HashMap<String, String> hashMap = new HashMap<>();
-
-        hashMap.put(sortBetween(word), word);
-        words.put(firstAndEnd, hashMap);
+        words.put(sortBetween(word), word);
     }
 
     public String get(String word) {
@@ -30,22 +18,17 @@ class Words {
             return word;
         }
 
-        return words.get(makeFirstAndEnd(word)).get(sortBetween(word));
+        return words.get(sortBetween(word));
     }
 
     private static boolean isNotAddable(String word) {
         return word.length() <= 3;
     }
 
-    private static String makeFirstAndEnd(String word) {
-        return String.valueOf(word.charAt(0))
-                + String.valueOf(word.charAt(word.length() - 1));
-    }
-
     private static String sortBetween(String word) {
-        char[] sorted = word.substring(1, word.length() - 1).toCharArray();
+        char[] sorted = word.toCharArray();
 
-        Arrays.sort(sorted);
+        Arrays.sort(sorted, 1, sorted.length - 1);
         return new String(sorted);
     }
 }
