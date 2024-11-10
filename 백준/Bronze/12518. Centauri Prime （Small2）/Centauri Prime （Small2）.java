@@ -30,11 +30,11 @@ class Main {
     static String findRuler(String name) {
         String last = name.substring(name.length() - 1);
 
-        if (TURMOIL.contains(last)) {
+        if (TURMOIL.indexOf(last) != -1) {
             return "nobody";
         }
 
-        if (VOWELS.contains(last)) {
+        if (VOWELS.indexOf(last) != -1) {
             return "a queen";
         }
 
