@@ -7,12 +7,13 @@ import java.util.Arrays;
 public class Main {
     static final int COW_COUNT = 12;
     static final int TEAM_COUNT = 4;
+    static final int MEMBER_COUNT = 3;
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static int[] skills = new int[COW_COUNT];
     static int[] teamSkills = new int[TEAM_COUNT];
-    static boolean[] visited = new boolean[COW_COUNT];
+    static int[] teamMemberCount = new int[TEAM_COUNT];
     static int minDiff = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws Exception {
@@ -25,8 +26,8 @@ public class Main {
         bw.flush();
     }
 
-    static void makeTeams(int teamCount) {
-        if (teamCount == TEAM_COUNT) {
+    static void makeTeams(int cowIndex) {
+        if (cowIndex == COW_COUNT) {
             int minSum = Arrays.stream(teamSkills).min().getAsInt();
             int maxSum = Arrays.stream(teamSkills).max().getAsInt();
 
@@ -34,31 +35,18 @@ public class Main {
             return;
         }
 
-        for (int one = 0; one < COW_COUNT - 2; one++) {
-            if (visited[one]) {
+        for (int teamIndex = 0; teamIndex < TEAM_COUNT; teamIndex++) {
+            if (teamMemberCount[teamIndex] == MEMBER_COUNT) {
                 continue;
             }
 
-            visited[one] = true;
-            for (int two = one + 1; two < COW_COUNT - 1; two++) {
-                if (visited[two]) {
-                    continue;
-                }
+            teamMemberCount[teamIndex]++;
+            teamSkills[teamIndex] += skills[cowIndex];
 
-                visited[two] = true;
-                for (int three = two + 1; three < COW_COUNT; three++) {
-                    if (visited[three]) {
-                        continue;
-                    }
+            makeTeams(cowIndex + 1);
 
-                    visited[three] = true;
-                    teamSkills[teamCount] = skills[one] + skills[two] + skills[three];
-                    makeTeams(teamCount + 1);
-                    visited[three] = false;
-                }
-                visited[two] = false;
-            }
-            visited[one] = false;
+            teamMemberCount[teamIndex]--;
+            teamSkills[teamIndex] -= skills[cowIndex];
         }
     }
 }
