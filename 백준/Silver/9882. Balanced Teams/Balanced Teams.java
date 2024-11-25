@@ -28,10 +28,7 @@ public class Main {
 
     static void makeTeams(int cowIndex) {
         if (cowIndex == COW_COUNT) {
-            int minSum = Arrays.stream(teamSkills).min().getAsInt();
-            int maxSum = Arrays.stream(teamSkills).max().getAsInt();
-
-            minDiff = Math.min(minDiff, maxSum - minSum);
+            compareMinDiff();
             return;
         }
 
@@ -48,5 +45,21 @@ public class Main {
             teamMemberCount[teamIndex]--;
             teamSkills[teamIndex] -= skills[cowIndex];
         }
+    }
+
+    static void compareMinDiff() {
+        int minSum = Integer.MAX_VALUE;
+        int maxSum = Integer.MIN_VALUE;
+
+        for (int teamIndex = 0; teamIndex < TEAM_COUNT; teamIndex++) {
+            if (minSum > teamSkills[teamIndex]) {
+                minSum = teamSkills[teamIndex];
+            }
+            if (maxSum < teamSkills[teamIndex]) {
+                maxSum = teamSkills[teamIndex];
+            }
+        }
+
+        minDiff = Math.min(minDiff, maxSum - minSum);
     }
 }
