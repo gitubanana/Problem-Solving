@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Stack;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,30 +12,23 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         int size = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[size];
-
-        for (int i = 0; i < size; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
-
         int[] ans = new int[size];
-        Stack<Integer> stack = new Stack<>();
+        Arrays.fill(ans, NONE);
 
-        for (int i = size - 1; i >= 0; i--) {
-            int curNum = arr[i];
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-            while (!stack.isEmpty()) {
-                int cmpIndex = stack.peek();
-                if (curNum != arr[cmpIndex]) {
-                    break;
-                }
-
-                stack.pop();
+        int prevIndex = 0;
+        int prevNumber = Integer.parseInt(st.nextToken());
+        for (int i = 1; i < size; i++) {
+            int curNumber = Integer.parseInt(st.nextToken());
+            if (prevNumber == curNumber) {
+                continue;
             }
 
-            ans[i] = (stack.isEmpty() ? NONE : stack.peek() + 1);
-            stack.push(i);
+            for (; prevIndex < i; prevIndex++) {
+                ans[prevIndex] = i + 1;
+            }
+            prevNumber = curNumber;
         }
 
         for (int i = 0; i < size; i++) {
