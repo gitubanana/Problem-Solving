@@ -48,7 +48,7 @@ public class Main {
 
     static int dfs(int cur, int prev) {
         int linkedNodeCount = 1;
-        boolean isCutNodeForChild = true;
+        int maxNodeCount = 0;
 
         for (int next : edges[cur]) {
             if (next == prev) {
@@ -56,14 +56,13 @@ public class Main {
             }
 
             int nextNodeCount = dfs(next, cur);
-            if (nextNodeCount > halfVcnt) {
-                isCutNodeForChild = false;
-            }
 
+            maxNodeCount = Math.max(maxNodeCount, nextNodeCount);
             linkedNodeCount += nextNodeCount;
         }
 
-        if (isCutNodeForChild && vCnt - linkedNodeCount <= halfVcnt) {
+        maxNodeCount = Math.max(maxNodeCount, vCnt - linkedNodeCount);
+        if (maxNodeCount <= halfVcnt) {
             cutNodes.add(cur);
         }
 
