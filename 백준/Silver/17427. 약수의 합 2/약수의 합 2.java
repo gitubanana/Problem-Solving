@@ -69,29 +69,17 @@ class FastIO {
 }
 
 public class Main {
-    static final int MAX_NUMBER = 1_000_000;
-
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static int[] aliquotSum = new int[MAX_NUMBER + 1];
 
     public static void main(String[] args) throws IOException {
-        initAliquotSum();
+        long ans = 0;
         int end = FastIO.nextInt();
-        long ans = 1;
 
-        for (int num = 2; num <= end; num++) {
-            ans += aliquotSum[num] + num + 1;
+        for (int num = 1; num <= end; num++) {
+            ans += (long) end / num * num;
         }
 
         bw.append(String.valueOf(ans));
         bw.flush();
-    }
-
-    static void initAliquotSum() {
-        for (int mul = 2; mul <= MAX_NUMBER; mul++) {
-            for (int num = mul * 2; num <= MAX_NUMBER; num += mul) {
-                aliquotSum[num] += mul;
-            }
-        }
     }
 }
