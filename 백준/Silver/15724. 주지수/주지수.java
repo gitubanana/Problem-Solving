@@ -85,13 +85,13 @@ public class Main {
         int qCnt = FastIO.nextInt();
 
         while (qCnt-- > 0) {
-            int y1 = FastIO.nextInt();
-            int x1 = FastIO.nextInt();
+            int y1 = FastIO.nextInt() - 1;
+            int x1 = FastIO.nextInt() - 1;
             int y2 = FastIO.nextInt();
             int x2 = FastIO.nextInt();
 
             bw.append(String.valueOf(
-                    dp[y2][x2] - dp[y1 - 1][x2] - dp[y2][x1 - 1] + dp[y1 - 1][x1 - 1]
+                    dp[y2][x2] - dp[y1][x2] - dp[y2][x1] + dp[y1][x1]
             ));
             bw.newLine();
         }
