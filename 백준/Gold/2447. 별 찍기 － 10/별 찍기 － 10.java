@@ -83,9 +83,7 @@ public class Main {
         makeStar(0, 0, 0, size);
 
         for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                bw.append(map[y][x]);
-            }
+            bw.write(map[y]);
             bw.newLine();
         }
         bw.flush();
