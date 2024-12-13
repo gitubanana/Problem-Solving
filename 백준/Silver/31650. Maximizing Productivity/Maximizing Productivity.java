@@ -110,7 +110,7 @@ public class Main {
             int mid = (left + right) / 2;
 
             if (arr[mid] >= toFind) {
-                pos = Math.min(pos, mid);
+                pos = mid;
                 right = mid - 1;
             } else {
                 left = mid + 1;
