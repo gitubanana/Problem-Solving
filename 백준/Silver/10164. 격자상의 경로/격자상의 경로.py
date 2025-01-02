@@ -26,11 +26,9 @@ def main():
 
     positions.append(Pos(0, 0))
     if via > 0:
-        positions.append(Pos(via // xSize, via % xSize))
+        positions.append(Pos(*divmod(via, xSize)))
     positions.append(Pos(ySize - 1, xSize - 1))
 
-    # for pos in positions:
-    #     print(pos)
     print(countWays(positions))
 
 main()
