@@ -12,7 +12,7 @@ enum e_color {
 };
 
 int vCnt;
-int colors[MAX_V];
+char colors[MAX_V];
 std::vector<int> edges[MAX_V];
 std::vector<int> teams[COLOR_CNT];
 
@@ -47,10 +47,6 @@ int main(void) {
     }
 
     for (int v = 1; v <= vCnt; v++) {
-        if (colors[v] != NONE) {
-            continue;
-        }
-
         dfs(v, WHITE);
     }
 
