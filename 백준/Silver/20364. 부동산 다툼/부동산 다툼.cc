@@ -2,16 +2,17 @@
 #include <unordered_set>
 
 const int ROOT = 1;
+const int MAX_V = 1 << 20;
 
 int lastLand;
-std::unordered_set<int> soldLands;
+bool soldout[MAX_V];
 
 int getAns(int wantLand) {
     int stop = -1;
     int cur = wantLand;
 
     while (cur > 0) {
-        if (soldLands.find(cur) != soldLands.end()) {
+        if (soldout[cur]) {
             stop = cur;
         }
 
@@ -19,7 +20,7 @@ int getAns(int wantLand) {
     }
 
     if (stop == -1) {
-        soldLands.insert(wantLand);
+        soldout[wantLand] = true;
         return 0;
     }
 
