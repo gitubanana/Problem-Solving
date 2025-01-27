@@ -54,7 +54,7 @@ void dijkstra(int start) {
     }
 }
 
-int dfs(int cur, int prev=0) {
+int dfs(int cur) {
     int &curDp = dp[cur];
     if (curDp != INIT) {
         return curDp;
@@ -69,11 +69,11 @@ int dfs(int cur, int prev=0) {
     curDp = 0;
     for (const t_edge &next : edges[cur]) {
         const int &nextDist = dists[next.v];
-        if (next.v == prev || nextDist >= curDist) {
+        if (nextDist >= curDist) {
             continue;
         }
 
-        curDp += dfs(next.v, cur);
+        curDp += dfs(next.v);
     }
     return curDp;
 }
