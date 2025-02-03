@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <cstring>
 #include <queue>
 #include <vector>
 
@@ -19,12 +18,10 @@ const int VISITED = -1;
 int vCnt;
 int start, end;
 int dists[MAX_V];
-bool removed[MAX_V][MAX_V];
 std::vector<int> prevs[MAX_V];
 std::vector<t_edge> edges[MAX_V];
 
 inline void initEdges() {
-    memset(removed, false, sizeof(removed));
     for (int v = 0; v < vCnt; v++) {
         prevs[v].clear();
         edges[v].clear();
@@ -37,7 +34,7 @@ inline void initDists() {
     }
 }
 
-void makeShortestPath() {
+int dijkstra() {
     std::priority_queue<t_edge> pq;
 
     initDists();
@@ -67,51 +64,28 @@ void makeShortestPath() {
             }
         }
     }
+    return dists[end] == INF ? -1 : dists[end];
+}
+
+void makeWeightInf(int cur, int next) {
+    for (t_edge &edge : edges[cur]) {
+        if (edge.v == next) {
+            edge.w = INF;
+            return;
+        }
+    }
 }
 
 void removeShortestPath(int cur) {
     dists[cur] = VISITED;
     for (const int &prev : prevs[cur]) {
-        removed[prev][cur] = true;
+        makeWeightInf(prev, cur);
         if (dists[prev] == VISITED) {
             continue;
         }
 
         removeShortestPath(prev);
     }
-}
-
-int secondShortestPath() {
-    std::priority_queue<t_edge> pq;
-
-    initDists();
-    dists[start] = 0;
-    pq.push({start, 0});
-    while (!pq.empty()) {
-        const t_edge cur = pq.top();
-        const int &curDist = dists[cur.v];
-        pq.pop();
-
-        if (curDist != cur.w) {
-            continue;
-        }
-
-        for (const t_edge &next : edges[cur.v]) {
-            if (removed[cur.v][next.v]) {
-                continue;
-            }
-
-            int &nextDist = dists[next.v];
-            int cmpDist = curDist + next.w;
-            if (nextDist <= cmpDist) {
-                continue;
-            }
-
-            nextDist = cmpDist;
-            pq.push({next.v, nextDist});
-        }
-    }
-    return dists[end] == INF ? -1 : dists[end];
 }
 
 int main(void) {
@@ -132,10 +106,9 @@ int main(void) {
             edges[from].push_back({to, w});
         }
 
-        makeShortestPath();
+        dijkstra();
         removeShortestPath(end);
-        fprintf(stdout, "%d\n", secondShortestPath());
+        fprintf(stdout, "%d\n", dijkstra());
     }
-
     return 0;
 }
