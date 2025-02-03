@@ -6,20 +6,14 @@ const int START = 1;
 
 int vCnt;
 bool isFan[MAX_V];
-bool visited[MAX_V];
 std::vector<int> edges[MAX_V];
 
 bool canAvoidFans(int cur=START) {
-    visited[cur] = true;
     if (isFan[cur]) {
         return false;
     }
 
     for (const int &next : edges[cur]) {
-        if (visited[next]) {
-            continue;
-        }
-
         if (canAvoidFans(next)) {
             return true;
         }
