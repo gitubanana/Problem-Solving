@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <vector>
 #include <queue>
-#include <map>
+#include <unordered_map>
 
-using t_map = std::map<int, int>;
+using t_umap = std::unordered_map<int, int>;
 
 const int MAX_BIT = 30 + 1;
 const int MAX_V = 1e4 + 1;
@@ -52,7 +52,7 @@ void printPath(int cur) {
 int main(void) {
     int bitCnt;
     char num[MAX_BIT];
-    t_map idxByBits;
+    t_umap idxByBits;
 
     scanf(" %d %d", &vCnt, &bitCnt);
     for (int v = 1; v <= vCnt; v++) {
@@ -69,9 +69,8 @@ int main(void) {
 
     for (int v = 1; v <= vCnt; v++) {
         for (int i = 0; i < bitCnt; i++) {
-            int nextBit = bits[v] ^ 1 << i;
-            t_map::iterator it = idxByBits.lower_bound(nextBit);
-            if (it == idxByBits.end() || bits[it->second] != nextBit) {
+            t_umap::iterator it = idxByBits.find(bits[v] ^ 1 << i);
+            if (it == idxByBits.end()) {
                 continue;
             }
 
