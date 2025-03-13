@@ -17,6 +17,7 @@ enum e_idx {
 const int MAX_V = 1e5;
 
 int vCnt;
+int inOrderIndex[MAX_V + 1];
 int orders[2][MAX_V];
 
 void preOrder(int postLeft, int postRight, int inLeft, int inRight) {
@@ -24,17 +25,12 @@ void preOrder(int postLeft, int postRight, int inLeft, int inRight) {
         return;
     }
 
-    int rootIndex = inLeft;
     const int &root = orders[POST][postRight];
-
-    fprintf(stdout, "%d ", root);
-    while (orders[IN][rootIndex] != root) {
-        rootIndex++;
-    }
-
+    int rootIndex = inOrderIndex[root];
     int leftTreeSize = rootIndex - inLeft;
-    int rightTreeSize = inRight - rootIndex;
-
+    int rightTreeSize = inRight - rootIndex;    
+    
+    fprintf(stdout, "%d ", root);
     preOrder(postLeft, postLeft + leftTreeSize - 1, inLeft, inLeft + leftTreeSize - 1);
     preOrder(postRight - rightTreeSize, postRight - 1, inRight - rightTreeSize + 1, inRight);
 }
@@ -45,6 +41,10 @@ int main(void) {
         for (int x = 0; x < vCnt; x++) {
             fscanf(stdin, " %d", &orders[y][x]);
         }
+    }
+
+    for (int i = 0; i < vCnt; i++) {
+        inOrderIndex[orders[IN][i]] = i;
     }
 
     preOrder(0, vCnt - 1, 0, vCnt - 1);
