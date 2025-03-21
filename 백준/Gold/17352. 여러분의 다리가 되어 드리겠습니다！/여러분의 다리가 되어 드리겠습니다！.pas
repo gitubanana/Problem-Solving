@@ -9,13 +9,22 @@ procedure initParents();
             parents[i] := i;
     end;
 function getParent(x : longInt) : longInt;
+    var p, save : longInt;
     begin
-        if x = parents[x] then
-            getParent := x
-        else
-            getParent := getParent(parents[x]);
+        p := x;
+        while p <> parents[p] do
+        begin
+            p := parents[p];
+        end;
 
-        parents[x] := getParent;
+        while x <> parents[x] do
+        begin
+            save := parents[x];
+            parents[x] := p;
+            x := save;
+        end;
+
+        getParent := p;
     end;
 procedure group(a, b : longInt);
     begin
