@@ -3,7 +3,6 @@
 const int MAX_V = 10;
 
 int vCnt;
-bool visited[MAX_V];
 int dists[MAX_V][MAX_V];
 int ans = (1L << 31) - 1;
 
@@ -24,25 +23,24 @@ void floydWarshall(void) {
     }
 }
 
-void backTracking(int cur, int curDist=0, int depth=0) {
-    static const int depthLimit = vCnt - 1;
+void backTracking(int cur, int curDist=0, int visited=0) {
+    static const int endVisited = (1 << vCnt) - 1;
 
-    if (depth == depthLimit) {
+    visited |= (1 << cur);
+    if (visited == endVisited) {
         if (ans > curDist) {
             ans = curDist;
         }
         return;
     }
 
-    visited[cur] = true;
     for (int next = 0; next < vCnt; next++) {
-        if (visited[next]) {
+        if (visited & (1 << next)) {
             continue;
         }
 
-        backTracking(next, curDist + dists[cur][next], depth + 1);
+        backTracking(next, curDist + dists[cur][next], visited);
     }
-    visited[cur] = false;
 }
 
 int main(void) {
