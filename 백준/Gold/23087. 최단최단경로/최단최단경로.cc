@@ -5,24 +5,13 @@
 struct Edge {
     int v;
     long w;
-};
 
-struct Move : public Edge {
-    int t;
-
-    Move(int v, long w, int t) : Edge({v, w}) {
-        this->t = t;
-    }
-
-    inline bool operator<(const Move &other) const {
-        if (this->w != other.w) {
-            return this->w > other.w;
-        }
-        return this->t > other.t;
+    inline bool operator<(const Edge &other) const {
+        return this->w > other.w;
     }
 };
 
-using t_pq = std::priority_queue<Move>;
+using t_pq = std::priority_queue<Edge>;
 
 const int MAX_V = 1e5 + 1;
 const int DIVISOR = 1e9 + 9;
@@ -48,14 +37,14 @@ void dijkstra() {
     init();
     cnt[start] = 1;
     dists[start] = transfer[start] = 0;
-    pq.push(Move(start, 0, 0));
+    pq.push({start, 0});
     while (!pq.empty()) {
-        const Move cur = pq.top();
+        const Edge cur = pq.top();
         const int &curTransfer = transfer[cur.v];
         const long &curDist = dists[cur.v];
         pq.pop();
 
-        if (cur.w != curDist || cur.t != curTransfer) {
+        if (cur.w != curDist) {
             continue;
         }
 
@@ -75,7 +64,7 @@ void dijkstra() {
                 } else if (cmpTransfer > nextTransfer) {
                     cnt[next.v] = cnt[cur.v];
                     cmpTransfer = nextTransfer;
-                    pq.push(Move(next.v, nextDist, nextTransfer));
+                    pq.push({next.v, nextDist});
                 }
                 continue;
             }
@@ -83,7 +72,7 @@ void dijkstra() {
             cmpDist = nextDist;
             cnt[next.v] = cnt[cur.v];
             cmpTransfer = nextTransfer;
-            pq.push(Move(next.v, nextDist, nextTransfer));
+            pq.push({next.v, nextDist});
         }
     }
 }
