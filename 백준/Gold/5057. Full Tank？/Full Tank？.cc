@@ -25,6 +25,7 @@ const int MAX_CAPACITY = 1e2 + 1;
 
 int vCnt;
 int capacity;
+int start, end;
 int price[MAX_V];
 int cost[MAX_V][MAX_CAPACITY];
 std::vector<Edge> edges[MAX_V];
@@ -37,7 +38,7 @@ inline void init(void) {
     }
 }
 
-void dijkstra(int start) {
+void dijkstra() {
     std::priority_queue<Move> pq;
 
     init();
@@ -47,6 +48,10 @@ void dijkstra(int start) {
         const Move cur = pq.top();
         const int &curCost = cost[cur.v][cur.filled];
         pq.pop();
+
+        if (cur.v == end) {
+            return;
+        }
 
         if (cur.w != curCost) {
             continue;
@@ -97,10 +102,8 @@ int main(void) {
 
     fscanf(stdin, " %d", &qCnt);
     for (int q = 0; q < qCnt; q++) {
-        int start, end;
-
         fscanf(stdin, " %d %d %d", &capacity, &start, &end);
-        dijkstra(start);
+        dijkstra();
 
         int &ans = cost[end][0];
         if (ans == INF) {
