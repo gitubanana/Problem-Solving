@@ -55,7 +55,6 @@ struct UnionFind {
 };
 
 int main(void) {
-    int start;
     int vCnt, eCnt, oneEdge;
     scanf(" %d %d %d", &vCnt, &eCnt, &oneEdge);
 
@@ -65,14 +64,13 @@ int main(void) {
 
         scanf(" %d %d", &a, &b);
         if (e == oneEdge) {
-            start = a;
             continue;
         }
 
         uf.group(a, b);
     }
 
-    long long startSize = uf.sizeOf(start);
-    printf("%lld\n", startSize * (vCnt - startSize));
+    long long oneSize = uf.sizeOf(1);
+    printf("%lld\n", oneSize * (vCnt - oneSize));
     return 0;
 }
