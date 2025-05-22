@@ -7,7 +7,6 @@ typedef unsigned int uint32;
 typedef uint32 (*t_func)(uint32);
 
 const int MAX_BUFFER_SIZE = 22016;
-const long DIVISOR = 1L << 32;
 
 static char buffer[MAX_BUFFER_SIZE];
 
@@ -22,11 +21,11 @@ static inline uint32 nextUint32(void) {
 }
 
 static inline uint32 dividedBy2(uint32 num) {
-    return (num >> 1L) % DIVISOR;
+    return (num >> 1L);
 }
 
 static inline uint32 multipliedBy2(uint32 num) {
-    return (num << 1L) % DIVISOR;
+    return (num << 1L);
 }
 
 static bool bfs(uint32 start, uint32 end) {
