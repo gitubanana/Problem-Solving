@@ -1,14 +1,8 @@
 Program Hello
     integer :: numberOfApplesInBag
     integer :: numberOfBags
-    integer :: dozenCnt, dozenPrice
+    integer :: dozenPrice
 
     Read(*, *) numberOfApplesInBag, numberOfBags, dozenPrice
-
-    dozenCnt = numberOfApplesInBag * numberOfBags / 12;
-    if (dozenCnt * 12 .NE. numberOfApplesInBag * numberOfBags) then
-        dozenCnt = dozenCnt + 1
-    endif
-
-    Print '(i0)', dozenCnt * dozenPrice
+    Print '(i0)', (numberOfApplesInBag * numberOfBags + 11) / 12 * dozenPrice
 End Program Hello
