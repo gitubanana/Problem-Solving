@@ -25,15 +25,17 @@ public class Main {
         int taller = Integer.parseInt(st.nextToken());
         int smaller = Integer.parseInt(st.nextToken());
         boolean[] visited = new boolean[vCnt + 1];
+        String result;
 
-        // ternary operator : left associative
-        System.out.println(
-                dfs(smaller, taller, edges, visited)
-                        ? "no"
-                        : dfs(taller, smaller, edges, visited)
-                                ? "yes"
-                                : "unknown"
-        );
+        if (dfs(taller, smaller, edges, visited)) {
+            result = "yes";
+        } else if (dfs(smaller, taller, edges, visited)) {
+            result = "no";
+        } else {
+            result = "unknown";
+        }
+
+        System.out.println(result);
     }
 
     static boolean dfs(int cur, int target, List<Integer>[] edges, boolean[] visited) {
