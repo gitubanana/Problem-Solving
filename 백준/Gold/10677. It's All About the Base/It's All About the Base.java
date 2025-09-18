@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 public class Main {
     static final int MIN_BASE = 10;
     static final int MAX_BASE = 15000;
-    static final int NOT_FOUND = -404;
 
     static long calculate(String num, int base) {
         long ret = 0;
@@ -17,34 +16,25 @@ public class Main {
         return ret;
     }
 
-    static int binarySearch(String num, long toFind) {
-        int left = MIN_BASE;
-        int right = MAX_BASE;
-
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            long cmp = calculate(num, mid);
-
-            if (cmp == toFind) {
-                return mid;
-            }
-
-            if (cmp > toFind) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return NOT_FOUND;
-    }
-
     static String findBases(String a, String b) {
-        for (int aBase = MIN_BASE; aBase <= MAX_BASE; aBase++) {
-            int bBase = binarySearch(b, calculate(a, aBase));
-            if (bBase != NOT_FOUND) {
+        int aBase = MIN_BASE;
+        int bBase = MIN_BASE;
+
+        while (aBase <= MAX_BASE && bBase <= MAX_BASE) {
+            long aNum = calculate(a, aBase);
+            long bNum = calculate(b, bBase);
+
+            if (aNum == bNum) {
                 return String.format("%d %d", aBase, bBase);
             }
+
+            if (aNum > bNum) {
+                bBase++;
+            } else {
+                aBase++;
+            }
         }
+
         return "nope";
     }
 
