@@ -1,0 +1,1 @@
+print(sum([int(input()) * cost for cost in [3, 4, 5]]))

@@ -1,0 +1,1 @@
+print(sum(n*5 for n in map(int, input().split())))
