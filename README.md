@@ -31,4 +31,12 @@ problem-solving study
 |  |
 | ------- |
 | [0017-letter-combinations-of-a-phone-number](https://github.com/gitubanana/Problem-Solving/tree/master/0017-letter-combinations-of-a-phone-number) |
+## Dynamic Programming
+|  |
+| ------- |
+| [0338-counting-bits](https://github.com/gitubanana/Problem-Solving/tree/master/0338-counting-bits) |
+## Bit Manipulation
+|  |
+| ------- |
+| [0338-counting-bits](https://github.com/gitubanana/Problem-Solving/tree/master/0338-counting-bits) |
 <!---LeetCode Topics End-->
